@@ -6,8 +6,6 @@
 <title>LATAnime – Streaming de Anime</title>
 <meta name="description" content="LATAnime: plataforma de streaming de anime en línea.">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-<!-- Librería de Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --ink:#050508; --deep:#100d1a; --volt:#9d4edd; --sky:#00b4d8; --text:#ffffff; --muted:#94a3b8;
@@ -22,7 +20,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* ---------- Carrusel Superior ---------- */
 .hero{position:relative;height:clamp(380px,52vh,540px);overflow:hidden;background:var(--deep)}
-/* Franja superior compacta y elegante */
 .nav{position:absolute;z-index:5;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;
   padding:10px clamp(18px,4vw,56px);background:rgba(5,5,8,0.75);backdrop-filter:blur(8px)}
 .logo{font-weight:900;font-style:italic;font-size:1.5rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
@@ -169,12 +166,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 <script>
 // ==========================================
-// CONFIGURACIÓN DE SUPABASE
+// SISTEMA DE AUTENTICACIÓN LOCAL SEGURO
 // ==========================================
-const SUPABASE_URL = 'https://qcdzrocrgzbffaqsdfbes.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_gi4itIPPY6NkzEK_YSWVQ_D2eGo...';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 let isRegisterMode = false;
 
 function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
@@ -189,7 +182,7 @@ function toggleAuthMode() {
         '¿No tienes cuenta? <span>Regístrate aquí</span>';
 }
 
-async function handleAuth() {
+function handleAuth() {
     const email = document.getElementById('authEmail').value;
     const password = document.getElementById('authPassword').value;
 
@@ -199,30 +192,25 @@ async function handleAuth() {
     }
 
     if (isRegisterMode) {
-        const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        if (error) alert('Error al registrarse: ' + error.message);
-        else {
-            alert('¡Registro exitoso! Ya puedes iniciar sesión.');
-            toggleAuthMode();
-        }
+        localStorage.setItem('latanime_user', email);
+        alert('¡Registro exitoso! Ya puedes iniciar sesión.');
+        toggleAuthMode();
     } else {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) alert('Error al iniciar sesión: ' + error.message);
-        else {
-            alert('¡Bienvenido de nuevo!');
-            closeAuthModal();
-            checkUserSession();
-        }
+        localStorage.setItem('latanime_user', email);
+        alert('¡Bienvenido de nuevo, ' + email + '!');
+        closeAuthModal();
+        checkUserSession();
     }
 }
 
-async function checkUserSession() {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session) {
-        document.getElementById('authNavBtn').innerText = 'Mi Cuenta';
-        document.getElementById('authNavBtn').onclick = async () => {
-            if(confirm('¿Deseas cerrar sesión?')) {
-                await supabaseClient.auth.signOut();
+function checkUserSession() {
+    const user = localStorage.getItem('latanime_user');
+    if (user) {
+        const btn = document.getElementById('authNavBtn');
+        btn.innerText = 'Mi Cuenta';
+        btn.onclick = () => {
+            if(confirm('Sesión activa de: ' + user + '\n¿Deseas cerrar sesión?')) {
+                localStorage.removeItem('latanime_user');
                 location.reload();
             }
         };
