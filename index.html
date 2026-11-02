@@ -91,7 +91,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .history-list { max-height: 180px; overflow-y: auto; background: #151124; border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); }
 .history-item { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
 
-/* ---------- Estilo Detalle Anime (Estilo Mega1080) ---------- */
+/* ---------- Estilo Detalle Anime ---------- */
 .anime-hero-bg {
     position: relative; background-size: cover; background-position: center; padding: 3rem 2.5rem 2rem 2.5rem;
     display: flex; gap: 30px; flex-wrap: wrap; align-items: flex-start;
@@ -118,11 +118,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .anime-body-section { padding: 2rem 2.5rem 3rem 2.5rem; }
 .section-title { font-size: 1.4rem; font-style: italic; font-weight: 800; margin: 0 0 15px 0; color: #fff; border-left: 4px solid var(--volt); padding-left: 10px; }
 
-/* Galería de imágenes / Banners */
-.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 30px; }
-.gallery-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-
-/* Selector de Temporadas y Episodios en Tarjetas Horizontales */
+/* Selector de Temporadas y Episodios */
 .season-selector-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
 .season-select { background: #1e1936; color: #fff; border: 1px solid rgba(157,78,221,0.5); padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
 
@@ -166,12 +162,11 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Modal de Detalle Estilo Mega1080 -->
+<!-- Modal de Detalle -->
 <div class="modal" id="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">×</span>
         
-        <!-- Cabecera Hero con Poster y Datos -->
         <div class="anime-hero-bg" id="modalHeroBg">
             <div class="anime-poster-container">
                 <img class="anime-poster-img" id="modalPoster" src="" alt="Poster">
@@ -184,7 +179,7 @@ button{font:inherit;color:inherit;cursor:pointer}
                 <div class="info-box">
                     <h4><i class="fas fa-info-circle"></i> Información</h4>
                     <div class="info-grid" id="modalInfoGrid">
-                        <span><b>Estudio:</b> MAPHA / Pierrot</span>
+                        <span><b>Estudio:</b> Animación / Producción</span>
                         <span><b>Estado:</b> En emisión</span>
                         <span><b>Duración:</b> 24m</span>
                         <span id="modalYearSpan"><b>Estreno:</b> 2002</span>
@@ -193,11 +188,7 @@ button{font:inherit;color:inherit;cursor:pointer}
             </div>
         </div>
 
-        <!-- Cuerpo con Galería y Episodios -->
         <div class="anime-body-section">
-            <h3 class="section-title">Galería</h3>
-            <div class="gallery-grid" id="modalGallery"></div>
-
             <div class="season-selector-bar">
                 <h3 class="section-title" style="margin:0; border:none; padding:0;">Episodios</h3>
                 <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
@@ -205,7 +196,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
             <div class="episodes-grid" id="epList"></div>
 
-            <h3 class="section-title" style="margin-top: 30px;">Reproductor</h3>
+            <h3 class="section-title" style="margin-top: 20px;">Reproductor</h3>
             <div class="video-box" id="videoBox">
                 <div class="placeholder">
                     <i class="fas fa-film" style="font-size:2.5rem; color:var(--volt); margin-bottom:10px;"></i>
@@ -338,7 +329,7 @@ function checkUserSession() {
 checkUserSession();
 
 // ==========================================
-// DATOS DE LOS ANIMES
+// DATOS DE LOS ANIMES (Todos en carrusel y con miniatura por episodio)
 // ==========================================
 const ANIME = [
   {
@@ -349,7 +340,7 @@ const ANIME = [
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [
-        { title: "Episodio 1", subtitle: "¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4", thumb: "naruto.jpg" },
+        { title: "Episodio 1", subtitle: "¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4", thumb: "naruto01.jpg" },
         { title: "Episodio 2", subtitle: "¡Mi nombre es Konohamaru!", url: "", thumb: "naruto.jpg" }
       ]}
     ]
@@ -361,7 +352,9 @@ const ANIME = [
     banner: "demonslayer01.jpg",
     f: true,
     seasons: [
-      { name: "Temporada 1", episodes: [{ title: "Episodio 1", subtitle: "Crueldad", url: "", thumb: "demonslayerr.jpg" }] }
+      { name: "Temporada 1", episodes: [
+        { title: "Episodio 1", subtitle: "Crueldad", url: "", thumb: "demonslayer01.jpg" }
+      ]}
     ]
   },
   {
@@ -371,7 +364,9 @@ const ANIME = [
     banner: "jujutsu01.jpg",
     f: true,
     seasons: [
-      { name: "Temporada 1", episodes: [{ title: "Episodio 1", subtitle: "Ryomen Sukuna", url: "", thumb: "jujutsu.webp" }] }
+      { name: "Temporada 1", episodes: [
+        { title: "Episodio 1", subtitle: "Ryomen Sukuna", url: "", thumb: "jujutsu01.jpg" }
+      ]}
     ]
   },
   {
@@ -381,17 +376,21 @@ const ANIME = [
     banner: "onepiece01.jpg",
     f: true,
     seasons: [
-      { name: "East Blue", episodes: [{ title: "Episodio 1", subtitle: "¡Soy Luffy!", url: "", thumb: "onepiece.webp" }] }
+      { name: "East Blue", episodes: [
+        { title: "Episodio 1", subtitle: "¡Soy Luffy!", url: "", thumb: "onepiece01.jpg" }
+      ]}
     ]
   },
   {
-    id: "attack", t: "Attack on Titan", g: "Drama / Acción", y: 2013, r: "9.1",
+    id: "attack", t: "Attack on Titan", g: ["Drama", "Acción", "Fantasía"], y: 2013, r: "9.1",
     d: "La humanidad sobrevive confinada tras enormes murallas para protegerse de gigantescos titanes devoradores de hombres.",
     img: "atakto.webp",
     banner: "attack01.jpg",
     f: true,
     seasons: [
-      { name: "Temporada 1", episodes: [{ title: "Episodio 1", subtitle: "Para ti, en 2000 años", url: "", thumb: "atakto.webp" }] }
+      { name: "Temporada 1", episodes: [
+        { title: "Episodio 1", subtitle: "Para ti, en 2000 años", url: "", thumb: "attack01.jpg" }
+      ]}
     ]
   }
 ];
@@ -399,7 +398,7 @@ const ANIME = [
 const $ = s => document.querySelector(s);
 let currentAnime = null;
 
-// Carrusel
+// Carrusel (Incluye todos los animes con f: true)
 const feat = ANIME.filter(x => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
   <section class="slide${i ? "" : " on"}" style="background-image: url('${x.banner}')">
@@ -438,7 +437,6 @@ $("#grid").innerHTML = ANIME.map(x => `
 function openModal(id) {
     currentAnime = ANIME.find(x => x.id === id);
     
-    // Rellenar cabecera tipo Mega1080
     $("#modalHeroBg").style.backgroundImage = `url('${currentAnime.banner}')`;
     $("#modalPoster").src = currentAnime.img;
     $("#modalTitle").innerText = `${currentAnime.t} (${currentAnime.y})`;
@@ -447,12 +445,6 @@ function openModal(id) {
     $("#modalGenres").innerHTML = genres.map(g => `<li>${g}</li>`).join("");
     $("#modalDesc").innerText = currentAnime.d;
     $("#modalYearSpan").innerHTML = `<b>Estreno:</b> ${currentAnime.y}`;
-
-    // Galería de imágenes de relleno (usando el poster y banner)
-    $("#modalGallery").innerHTML = `
-        <img class="gallery-img" src="${currentAnime.banner}" alt="Galeria 1">
-        <img class="gallery-img" src="${currentAnime.img}" alt="Galeria 2">
-    `;
 
     resetVideo();
     $("#seasonSelect").innerHTML = currentAnime.seasons.map((s, i) => `<option value="${i}">${s.name}</option>`).join("");
