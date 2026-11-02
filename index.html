@@ -143,7 +143,7 @@ const ANIME = [
   {
     id: "naruto", t: "Naruto", g: "Shonen / Acción", y: 2002, r: "9.0",
     d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas y batallas intensas.",
-    img: "naruto.jpg", f: true, // <--- Aquí ya está apuntando a tu foto subida
+    img: "naruto.jpg", f: true,
     seasons: [
       { name: "Temporada 1", episodes: [
         { title: "Episodio 1: ¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4" },
@@ -154,7 +154,7 @@ const ANIME = [
   {
     id: "demonslayer", t: "Demon Slayer", g: "Acción / Fantasía", y: 2019, r: "9.0",
     d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia masacrada por un demonio y curar a su hermana Nezuko.",
-    img: "", f: true,
+    img: "demonslayerr.jpg", f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Crueldad", url: "" }] }
     ]
@@ -162,7 +162,7 @@ const ANIME = [
   {
     id: "jujutsu", t: "Jujutsu Kaisen", g: "Sobrenatural", y: 2020, r: "8.8",
     d: "Yuji Itadori se une a una organización secreta de hechiceros tras ingerir un objeto maldito de categoría especial.",
-    img: "", f: true,
+    img: "jujutsu.webp", f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Ryomen Sukuna", url: "" }] }
     ]
@@ -170,7 +170,7 @@ const ANIME = [
   {
     id: "onepiece", t: "One Piece", g: "Aventura", y: 1999, r: "9.1",
     d: "Monkey D. Luffy zarpa con su tripulación en busca del legendario tesoro dejado por el Rey de los Piratas.",
-    img: "", f: true,
+    img: "onepiece.webp", f: true,
     seasons: [
       { name: "East Blue", episodes: [{ title: "Episodio 1: ¡Soy Luffy!", url: "" }] }
     ]
@@ -178,7 +178,7 @@ const ANIME = [
   {
     id: "attack", t: "Attack on Titan", g: "Drama / Acción", y: 2013, r: "9.1",
     d: "La humanidad sobrevive confinada tras enormes murallas para protegerse de gigantescos titanes devoradores de hombres.",
-    img: "", f: true,
+    img: "atakto.webp", f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Para ti, en 2000 años", url: "" }] }
     ]
@@ -191,7 +191,7 @@ let currentAnime = null;
 // Carrusel
 const feat = ANIME.filter(x => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
-  <section class="slide${i ? "" : " on"}" style="background-image: url('${x.img || ""}')">
+  <section class="slide${i ? "" : " on"}" style="background-image: url('${x.img}')">
     <div class="copy">
       <ul class="chips"><li class="rate">★ ${x.r}</li><li>${x.g}</li><li>${x.y}</li></ul>
       <h2>${x.t}</h2>
@@ -215,7 +215,7 @@ dots.forEach((d, i) => d.onclick = () => { go(i); clearInterval(timer); });
 
 // Catálogo Grid
 $("#grid").innerHTML = ANIME.map(x => `
-  <div class="card" onclick="openModal('${x.id}')" style="background-image: url('${x.img || ""}')">
+  <div class="card" onclick="openModal('${x.id}')" style="background-image: url('${x.img}')">
     <div class="art"></div>
     <span class="star">★ ${x.r}</span>
     <div class="card-info">
@@ -227,7 +227,7 @@ $("#grid").innerHTML = ANIME.map(x => `
 function openModal(id) {
     currentAnime = ANIME.find(x => x.id === id);
     $("#modalHeader").innerHTML = `
-        <img class="anime-poster-img" src="${currentAnime.img || ''}" alt="${currentAnime.t}">
+        <img class="anime-poster-img" src="${currentAnime.img}" alt="${currentAnime.t}">
         <div class="anime-info-text">
             <h3>${currentAnime.t}</h3>
             <div class="meta"><span>★ ${currentAnime.r}</span><span>•</span><span>${currentAnime.g}</span><span>•</span><span>${currentAnime.y}</span></div>
