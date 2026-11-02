@@ -3,51 +3,49 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aozora – Anime en línea</title>
-<meta name="description" content="Aozora: catálogo de anime. Elige tus series y arma tu lista.">
+<title>LATAnime – Streaming en línea</title>
+<meta name="description" content="LATAnime: plataforma de streaming de anime. Elige tus series y disfrútalas.">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
 :root{
-  --ink:#050d24; --deep:#081a47; --sea:#0d2f7a; --volt:#2f7bff; --sky:#8cc0ff; --ice:#eaf3ff;
-  --text:#f2f7ff; --muted:#9db6e3; --line:rgba(140,192,255,.22);
+  --ink:#07060b; --deep:#12101e; --sea:#0d2f7a; --volt:#9d4edd; --sky:#00b4d8; --ice:#eaf3ff;
+  --text:#ffffff; --muted:#94a3b8; --line:rgba(157, 78, 221, 0.25);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--ink);color:var(--text);
-  font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.5}
+  font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 
 /* ---------- mitad superior: carrusel ---------- */
 .hero{position:relative;height:clamp(380px,54vh,580px);overflow:hidden;
-  clip-path:polygon(0 0,100% 0,100% 90%,0 100%);background:var(--deep)}
+  clip-path:polygon(0 0,100% 0,100% 90%,0 100%);background:var(--deep);background-size:cover;background-position:center}
 .nav{position:absolute;z-index:5;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;
-  padding:18px clamp(18px,4vw,56px)}
-.logo{font-weight:900;font-style:italic;font-size:1.7rem;letter-spacing:-.04em;text-decoration:none;color:var(--text)}
-.logo b{color:var(--volt);font-style:normal;margin-right:2px}
-.mylist{background:rgba(5,13,36,.55);border:1px solid var(--line);border-radius:999px;padding:8px 16px;
-  backdrop-filter:blur(6px);font-weight:600}
+  padding:18px clamp(18px,4vw,56px);background:rgba(7,6,11,0.6);backdrop-filter:blur(8px)}
+.logo{font-weight:900;font-style:italic;font-size:1.7rem;letter-spacing:-.04em;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
+.logo b{color:var(--volt);font-style:normal}
+.mylist{background:rgba(18,16,30,.8);border:1px solid var(--line);border-radius:999px;padding:8px 16px;
+  backdrop-filter:blur(6px);font-weight:600;text-decoration:none;color:var(--text)}
 .mylist span{display:inline-block;min-width:1.5em;margin-left:6px;padding:0 6px;border-radius:999px;background:var(--volt);text-align:center}
 
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .9s ease,visibility .9s;
-  display:flex;align-items:center;padding:0 clamp(18px,6vw,96px)}
+  display:flex;align-items:center;padding:0 clamp(18px,6vw,96px);background-size:cover;background-position:center}
 .slide.on{opacity:1;visibility:visible}
 .slide::before{content:"";position:absolute;inset:0;
-  background:radial-gradient(60% 90% at 85% 40%,var(--a),transparent 70%),linear-gradient(115deg,var(--b) 25%,var(--a) 130%)}
-.slide::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,13,36,.85) 0%,rgba(5,13,36,.15) 70%)}
-.glyph{position:absolute;right:4vw;top:50%;transform:translateY(-50%) rotate(-6deg);z-index:1;
-  font-size:clamp(12rem,36vw,30rem);font-weight:900;font-style:italic;line-height:1;color:rgba(255,255,255,.09);user-select:none}
+  background:linear-gradient(180deg, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.85) 75%, var(--ink) 100%), linear-gradient(90deg,rgba(7,6,11,0.9) 0%,rgba(7,6,11,0.2) 70%)}
 .copy{position:relative;z-index:2;max-width:640px;margin-top:34px}
 .copy h2{margin:0 0 10px;font-size:clamp(2.2rem,6vw,4.8rem);line-height:.95;font-weight:900;font-style:italic;letter-spacing:-.035em;
-  text-shadow:0 4px 24px rgba(0,0,0,.4)}
+  text-shadow:0 4px 24px rgba(0,0,0,.6)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;padding:0;list-style:none}
 .chips li{padding:3px 11px;border-radius:999px;background:rgba(234,243,255,.14);font-size:.85rem;font-weight:600}
 .chips .rate{background:var(--volt)}
-.copy p{margin:0 0 18px;max-width:46ch;color:#d6e4ff}
+.copy p{margin:0 0 18px;max-width:46ch;color:#d6e4ff;text-shadow:1px 1px 3px rgba(0,0,0,0.8)}
 .btns{display:flex;flex-wrap:wrap;gap:10px}
-.btn{display:inline-block;border:0;border-radius:10px;padding:11px 22px;font-weight:800;text-decoration:none}
-.btn.main{background:var(--volt);color:#fff;box-shadow:0 8px 26px rgba(47,123,255,.45)}
-.btn.main:hover{background:#4a8dff}
+.btn{display:inline-block;border:0;border-radius:10px;padding:11px 22px;font-weight:800;text-decoration:none;cursor:pointer}
+.btn.main{background:linear-gradient(135deg, var(--volt), var(--sky));color:#fff;box-shadow:0 8px 26px rgba(157,78,221,.45)}
+.btn.main:hover{opacity:0.9}
 .btn.ghost{background:rgba(234,243,255,.12);border:1px solid var(--line);color:var(--text)}
 .btn.ghost[aria-pressed="true"]{background:var(--ice);color:var(--sea)}
 
@@ -57,178 +55,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 .dots button{width:12px;height:12px;border-radius:99px;border:0;padding:0;background:rgba(234,243,255,.35);transition:width .3s,background .3s}
 .dots button[aria-current="true"]{width:34px;background:var(--sky)}
 .arrows{display:flex;gap:8px}
-.arrows button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(5,13,36,.55);font-size:1.2rem}
+.arrows button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(5,13,36,.7);font-size:1.2rem}
 .arrows button:hover{background:var(--volt)}
 
 /* ---------- mitad inferior: recuadros ---------- */
-.catalog{padding:8px clamp(18px,4vw,56px) 120px;background:
-  radial-gradient(70% 40% at 50% 0,rgba(47,123,255,.22),transparent 70%),var(--ink)}
-.head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px;margin:0 0 18px}
-.head h1{margin:0;font-size:clamp(1.5rem,3vw,2.1rem);font-style:italic;font-weight:900;letter-spacing:-.03em}
-.head p{margin:0;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:18px}
-.card{position:relative;aspect-ratio:2/3;border:0;padding:0;text-align:left;border-radius:12px;overflow:hidden;
-  background-color:var(--sea);background-size:cover;background-position:center;
-  box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .2s,box-shadow .2s}
-.card .art{position:absolute;inset:0;background:radial-gradient(90% 60% at 80% 15%,var(--a),transparent 70%),linear-gradient(165deg,var(--a),var(--b))}
-.card .art i{position:absolute;right:-6%;top:6%;font-size:7.5rem;font-weight:900;color:rgba(255,255,255,.14);line-height:1}
-.card .info{position:absolute;inset:auto 0 0 0;padding:34px 12px 12px;background:linear-gradient(transparent,rgba(5,13,36,.94))}
-.card strong{display:block;font-size:1rem;line-height:1.15}
-.card small{color:var(--muted)}
-.card .star{position:absolute;top:10px;left:10px;padding:2px 9px;border-radius:99px;background:rgba(5,13,36,.7);font-size:.78rem;font-weight:700}
-.card .tick{position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:var(--ice);color:var(--sea);
-  display:grid;place-items:center;font-weight:900;transform:scale(0);transition:transform .22s cubic-bezier(.3,1.6,.5,1)}
-.card:hover{transform:translateY(-4px)}
-.card[aria-pressed="true"]{box-shadow:0 0 0 3px var(--sky),0 14px 34px rgba(47,123,255,.5)}
-.card[aria-pressed="true"] .tick{transform:scale(1)}
-
-/* ---------- barra de selección ---------- */
-.picked{position:fixed;z-index:20;left:50%;bottom:18px;transform:translate(-50%,160%);width:min(760px,calc(100% - 24px));
-  display:flex;align-items:center;gap:14px;padding:12px 14px 12px 20px;border-radius:16px;
-  background:rgba(8,26,71,.92);border:1px solid var(--line);backdrop-filter:blur(10px);box-shadow:0 18px 50px rgba(0,0,0,.55);
-  transition:transform .35s cubic-bezier(.2,.9,.3,1)}
-.picked.show{transform:translate(-50%,0)}
-.picked p{margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.picked p b{color:var(--sky)}
-@media (prefers-reduced-motion:reduce){.slide,.card,.card .tick,.picked,.dots button{transition:none}html{scroll-behavior:auto}}
-@media (max-width:560px){.copy p{display:none}.picked .ghost{display:none}}
-</style>
-</head>
-<body>
-
-<header class="hero" aria-roledescription="carrusel" aria-label="Anime destacados">
-  <nav class="nav">
-    <a class="logo" href="#"><b>/</b>Aozora</a>
-    <a class="mylist" href="#catalogo">Mi lista<span id="count">0</span></a>
-  </nav>
-  <div id="slides"></div>
-  <div class="ctrl">
-    <div class="dots" id="dots"></div>
-    <div class="arrows">
-      <button id="prev" aria-label="Anime anterior">&#8249;</button>
-      <button id="next" aria-label="Anime siguiente">&#8250;</button>
-    </div>
-  </div>
-</header>
-
-<main class="catalog" id="catalogo">
-  <div class="head">
-    <h1>Catálogo</h1>
-    <p>Toca un anime para elegirlo. Tu lista se guarda en este navegador.</p>
-  </div>
-  <div class="grid" id="grid"></div>
-</main>
-
-<div class="picked" id="picked" role="status" aria-live="polite">
-  <p id="pickedText"></p>
-  <a class="btn main" id="watch" href="#">Ver ahora</a>
-  <button class="btn ghost" id="clear">Limpiar</button>
-</div>
-
-<script>
-/* ============ TU CATÁLOGO ============
-   t: título · g: género · y: año · e: episodios · r: nota · d: sinopsis corta
-   a / b: colores de la portada · f: 1 = sale en el carrusel
-   img: (opcional) ruta o URL de la portada real, por ejemplo "img/mi-anime.jpg"
-   u: (opcional) enlace a la página donde se ve la serie                              */
-const ANIME = [
-  {id:"a1",t:"Demon Slayer",g:"Acción",y:2019,e:"44 episodios",r:"9.0",a:"#2f7bff",b:"#071a4d",f:1,d:"Un chico recorre un mundo lleno de demonios para encontrar la cura de su hermana."},
-  {id:"a2",t:"Jujutsu Kaisen",g:"Sobrenatural",y:2020,e:"47 episodios",r:"8.8",a:"#5b6bff",b:"#0b0f3d",f:1,d:"Maldiciones, hechiceros y un estudiante que carga con un poder prohibido."},
-  {id:"a3",t:"One Piece",g:"Aventura",y:1999,e:"1100+ episodios",r:"9.1",a:"#13b3ff",b:"#05285e",f:1,d:"Una tripulación pirata cruza el océano en busca del mayor tesoro del mundo."},
-  {id:"a4",t:"Frieren",g:"Fantasía",y:2023,e:"28 episodios",r:"9.3",a:"#7fd0ff",b:"#0a2a5c",f:1,d:"Después de vencer al rey demonio, una maga élfica descubre qué significa el tiempo."},
-  {id:"a5",t:"Spy x Family",g:"Comedia",y:2022,e:"37 episodios",r:"8.6",a:"#3fa2ff",b:"#0a1f55",f:1,d:"Un espía, una asesina y una niña telépata fingen ser una familia normal."},
-  {id:"a6",t:"Solo Leveling",g:"Acción",y:2024,e:"25 episodios",r:"8.5",a:"#8a5cff",b:"#120a4a",f:1,d:"El cazador más débil recibe un sistema secreto que le permite subir de nivel."},
-  {id:"a7",t:"Attack on Titan",g:"Drama",y:2013,e:"87 episodios",r:"9.1",a:"#1f6fe0",b:"#06163f"},
-  {id:"a8",t:"Haikyuu!!",g:"Deportes",y:2014,e:"85 episodios",r:"8.9",a:"#22c3ff",b:"#07305e"},
-  {id:"a9",t:"Dr. Stone",g:"Ciencia",y:2019,e:"57 episodios",r:"8.3",a:"#2bd1c7",b:"#073a55"},
-  {id:"a10",t:"My Hero Academia",g:"Acción",y:2016,e:"138 episodios",r:"8.1",a:"#4d8dff",b:"#0a1a52"},
-  {id:"a11",t:"Chainsaw Man",g:"Sobrenatural",y:2022,e:"12 episodios",r:"8.4",a:"#2a64d8",b:"#0a0f35"},
-  {id:"a12",t:"Naruto Shippuden",g:"Aventura",y:2007,e:"500 episodios",r:"8.7",a:"#5aa8ff",b:"#0b2a6f"}
-];
-
-const $ = (s) => document.querySelector(s);
-const KEY = "aozora-lista";
-let picked = new Set();
-try { picked = new Set(JSON.parse(localStorage.getItem(KEY) || "[]")); } catch (e) {}
-const byId = (id) => ANIME.find((x) => x.id === id);
-const bg = (x) => `--a:${x.a};--b:${x.b}`;
-const link = (x) => x.u || "#";
-
-/* ---------- carrusel ---------- */
-const feat = ANIME.filter((x) => x.f);
-$("#slides").innerHTML = feat.map((x, i) => `
-  <section class="slide${i ? "" : " on"}" style="${bg(x)}" aria-label="${x.t}">
-    <span class="glyph" aria-hidden="true">${x.t[0]}</span>
-    <div class="copy">
-      <h2>${x.t}</h2>
-      <ul class="chips"><li class="rate">${x.r}</li><li>${x.g}</li><li>${x.y}</li><li>${x.e}</li></ul>
-      <p>${x.d}</p>
-      <div class="btns">
-        <a class="btn main" href="${link(x)}">Ver ahora</a>
-        <button class="btn ghost" data-pick="${x.id}" aria-pressed="false">Agregar a mi lista</button>
-      </div>
-    </div>
-  </section>`).join("");
-$("#dots").innerHTML = feat.map((x, i) => `<button aria-label="Ir a ${x.t}" ${i ? "" : 'aria-current="true"'}></button>`).join("");
-
-const slides = [...document.querySelectorAll(".slide")];
-const dots = [...document.querySelectorAll("#dots button")];
-let cur = 0, timer;
-const go = (n) => {
-  cur = (n + slides.length) % slides.length;
-  slides.forEach((s, i) => s.classList.toggle("on", i === cur));
-  dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
-};
-const play = () => {
-  clearInterval(timer);
-  if (!matchMedia("(prefers-reduced-motion:reduce)").matches) timer = setInterval(() => go(cur + 1), 6000);
-};
-$("#prev").onclick = () => { go(cur - 1); play(); };
-$("#next").onclick = () => { go(cur + 1); play(); };
-dots.forEach((d, i) => (d.onclick = () => { go(i); play(); }));
-const hero = $(".hero");
-hero.addEventListener("mouseenter", () => clearInterval(timer));
-hero.addEventListener("mouseleave", play);
-let sx = 0;
-hero.addEventListener("touchstart", (e) => (sx = e.touches[0].clientX), { passive: true });
-hero.addEventListener("touchend", (e) => {
-  const dx = e.changedTouches[0].clientX - sx;
-  if (Math.abs(dx) > 50) { go(cur + (dx < 0 ? 1 : -1)); play(); }
-});
-play();
-
-/* ---------- recuadros ---------- */
-$("#grid").innerHTML = ANIME.map((x) => `
-  <button class="card" data-pick="${x.id}" aria-pressed="false" style="${bg(x)}${x.img ? `;background-image:url('${x.img}')` : ""}">
-    ${x.img ? "" : `<span class="art"><i aria-hidden="true">${x.t[0]}</i></span>`}
-    <span class="star">${x.r}</span>
-    <span class="tick" aria-hidden="true">&#10003;</span>
-    <span class="info"><strong>${x.t}</strong><small>${x.g}, ${x.y}</small></span>
-  </button>`).join("");
-
-/* ---------- selección ---------- */
-function paint() {
-  document.querySelectorAll("[data-pick]").forEach((el) => {
-    const on = picked.has(el.dataset.pick);
-    el.setAttribute("aria-pressed", on);
-    if (el.classList.contains("ghost")) el.textContent = on ? "En mi lista" : "Agregar a mi lista";
-  });
-  const names = [...picked].map((id) => byId(id).t);
-  $("#count").textContent = names.length;
-  $("#picked").classList.toggle("show", names.length > 0);
-  $("#pickedText").innerHTML = `<b>${names.length}</b> ${names.length === 1 ? "seleccionado" : "seleccionados"}: ${names.join(", ")}`;
-  if (names.length) $("#watch").href = link(byId([...picked][0]));
-  try { localStorage.setItem(KEY, JSON.stringify([...picked])); } catch (e) {}
-}
-document.addEventListener("click", (e) => {
-  const el = e.target.closest("[data-pick]");
-  if (!el) return;
-  const id = el.dataset.pick;
-  picked.has(id) ? picked.delete(id) : picked.add(id);
-  paint();
-});
-$("#clear").onclick = () => { picked.clear(); paint(); };
-paint();
-</script>
-</body>
-</html>
+.catalog{padding:8px clamp(18px,4vw,56px) 120px;flex:1;background:
+  radial-gradient(70% 40% at 50% 0,rgba(157,78,221,.15),transparent 70%),var(--ink)}
+.head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px
