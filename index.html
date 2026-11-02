@@ -22,12 +22,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* ---------- Carrusel Superior ---------- */
 .hero{position:relative;height:clamp(380px,52vh,540px);overflow:hidden;background:var(--deep)}
+/* Franja superior compacta y elegante */
 .nav{position:absolute;z-index:5;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;
-  padding:18px clamp(18px,4vw,56px);background:rgba(5,5,8,0.7);backdrop-filter:blur(8px)}
-.logo{font-weight:900;font-style:italic;font-size:1.7rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
+  padding:10px clamp(18px,4vw,56px);background:rgba(5,5,8,0.75);backdrop-filter:blur(8px)}
+.logo{font-weight:900;font-style:italic;font-size:1.5rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
 .logo b{color:var(--volt)}
-.nav-buttons { display: flex; gap: 12px; align-items: center; }
-.mylist{background:rgba(16,13,26,.9);border:1px solid rgba(157,78,221,0.3);border-radius:999px;padding:8px 16px;font-weight:600;text-decoration:none;color:var(--text); cursor:pointer;}
+.nav-buttons { display: flex; gap: 10px; align-items: center; }
+.mylist{background:rgba(16,13,26,.9);border:1px solid rgba(157,78,221,0.3);border-radius:999px;padding:6px 14px;font-size:0.9rem;font-weight:600;text-decoration:none;color:var(--text); cursor:pointer;}
 .mylist:hover { background: var(--volt); }
 
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s ease;
@@ -168,7 +169,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 <script>
 // ==========================================
-// CONFIGURACIÓN DE SUPABASE (Ya conectada)
+// CONFIGURACIÓN DE SUPABASE
 // ==========================================
 const SUPABASE_URL = 'https://qcdzrocrgzbffaqsdfbes.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_gi4itIPPY6NkzEK_YSWVQ_D2eGo...';
