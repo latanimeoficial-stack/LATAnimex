@@ -85,7 +85,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .switch-auth { font-size: 0.85rem; color: var(--muted); cursor: pointer; }
 .switch-auth span { color: var(--sky); text-decoration: underline; }
 
-/* Estilos para el panel de Cuenta / Historial */
+/* Panel de Mi Cuenta e Historial */
 .account-box { max-width: 500px; padding: 2.5rem; }
 .account-box h2 { margin-top: 0; font-style: italic; color: var(--sky); margin-bottom: 15px; }
 .history-list { max-height: 180px; overflow-y: auto; background: #151124; border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); }
@@ -263,10 +263,9 @@ function saveProfileName() {
 function recordHistory(animeTitle, epTitle) {
     let history = JSON.parse(localStorage.getItem('latanime_history') || '[]');
     const record = `${animeTitle} - ${epTitle}`;
-    // Evitar duplicar el último visto consecutivo
     if (history.length === 0 || history[0] !== record) {
         history.unshift(record);
-        if(history.length > 15) history.pop(); // Máximo 15 elementos
+        if(history.length > 15) history.pop();
         localStorage.setItem('latanime_history', JSON.stringify(history));
     }
 }
@@ -305,7 +304,7 @@ const ANIME = [
     id: "naruto", t: "Naruto", g: "Shonen / Acción", y: 2002, r: "9.0",
     d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas y batallas intensas.",
     img: "naruto.jpg",
-    banner: "naruto01.jpg", // Banner exacto vinculado con sufijo 01
+    banner: "naruto01.jpg",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [
@@ -318,7 +317,7 @@ const ANIME = [
     id: "demonslayer", t: "Demon Slayer", g: "Acción / Fantasía", y: 2019, r: "9.0",
     d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia masacrada por un demonio y curar a su hermana Nezuko.",
     img: "demonslayerr.jpg",
-    banner: "demonslayer01.jpg", // Banner exacto vinculado con sufijo 01
+    banner: "demonslayer01.jpg",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Crueldad", url: "" }] }
@@ -328,7 +327,7 @@ const ANIME = [
     id: "jujutsu", t: "Jujutsu Kaisen", g: "Sobrenatural", y: 2020, r: "8.8",
     d: "Yuji Itadori se une a una organización secreta de hechiceros tras ingerir un objeto maldito de categoría especial.",
     img: "jujutsu.webp",
-    banner: "jujutsu01.jpg", // Banner exacto vinculado con sufijo 01
+    banner: "jujutsu01.jpg",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Ryomen Sukuna", url: "" }] }
@@ -338,7 +337,7 @@ const ANIME = [
     id: "onepiece", t: "One Piece", g: "Aventura", y: 1999, r: "9.1",
     d: "Monkey D. Luffy zarpa con su tripulación en busca del legendario tesoro dejado por el Rey de los Piratas.",
     img: "onepiece.webp",
-    banner: "onepiece01.jpg", // Banner exacto vinculado con sufijo 01
+    banner: "onepiece01.jpg",
     f: true,
     seasons: [
       { name: "East Blue", episodes: [{ title: "Episodio 1: ¡Soy Luffy!", url: "" }] }
@@ -348,7 +347,7 @@ const ANIME = [
     id: "attack", t: "Attack on Titan", g: "Drama / Acción", y: 2013, r: "9.1",
     d: "La humanidad sobrevive confinada tras enormes murallas para protegerse de gigantescos titanes devoradores de hombres.",
     img: "atakto.webp",
-    banner: "attack01.jpg", // Banner exacto vinculado con sufijo 01
+    banner: "attack01.jpg",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Para ti, en 2000 años", url: "" }] }
@@ -425,7 +424,6 @@ function playEp(url, title, idx) {
     const btn = document.getElementById(`ep-${idx}`);
     if(btn) btn.classList.add("active");
 
-    // Guardar en el historial al reproducir
     recordHistory(currentAnime.t, title);
 
     const box = $("#videoBox");
