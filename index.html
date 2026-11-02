@@ -64,7 +64,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card{position:relative;aspect-ratio:2/3;border:0;padding:0;text-align:left;border-radius:12px;overflow:hidden;
   background-color:var(--deep);background-size:cover;background-position:center;
   box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .2s;cursor:pointer}
-.card .art{position:absolute;inset:0;background:linear-gradient(165deg, rgba(157,78,221,0.2), rgba(7,6,11,0.8))}
+.card .art{position:absolute;inset:0;background:linear-gradient(165deg, rgba(157,78,221,0.1), rgba(7,6,11,0.85))}
 .card .info{position:absolute;inset:auto 0 0 0;padding:25px 12px 12px;background:linear-gradient(transparent,rgba(7,6,11,.95))}
 .card strong{display:block;font-size:1rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card small{color:var(--muted)}
@@ -91,7 +91,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     overflow: hidden;
     position: relative;
     border: 1px solid var(--volt);
-    box-shadow: get-shadow: 0 0 40px rgba(157, 78, 221, 0.4);
+    box-shadow: 0 0 40px rgba(157, 78, 221, 0.4);
 }
 .close-btn {
     position: absolute;
@@ -102,16 +102,36 @@ button{font:inherit;color:inherit;cursor:pointer}
 .close-btn:hover { color: var(--sky); }
 .video-container { width: 100%; aspect-ratio: 16/9; background: #000; }
 .video-container video { width: 100%; height: 100%; border: none; }
-.episodes-section { padding: 1.5rem; max-height: 220px; overflow-y: auto; }
-.episodes-section h3 { margin: 0 0 10px 0; color: var(--sky); font-size: 1.2rem; }
+
+.modal-body { padding: 1.5rem; }
+.season-selector-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.season-select {
+    background: #1e1936;
+    color: #fff;
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+.season-select option { background: #12101e; color: #fff; }
+.episodes-list { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
 .ep-btn {
     background: #1e1936; color: #fff;
     border: 1px solid var(--line);
-    padding: 8px 16px; margin: 4px;
+    padding: 10px 14px;
     border-radius: 8px; cursor: pointer;
-    font-weight: 600; transition: 0.2s;
+    font-weight: 600; text-align: left; transition: 0.2s;
 }
-.ep-btn:hover { background: var(--volt); }
+.ep-btn:hover, .ep-btn.active { background: var(--volt); border-color: var(--sky); }
 </style>
 </head>
 <body>
@@ -134,22 +154,32 @@ button{font:inherit;color:inherit;cursor:pointer}
 <main class="catalog" id="catalogo">
   <div class="head">
     <h1>Catálogo de Animes</h1>
-    <p>Elige una serie para ver sus episodios y temporadas.</p>
+    <p>Elige una serie para ver sus temporadas y episodios oficiales.</p>
   </div>
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Modal de Reproducción -->
+<!-- Modal de Reproducción con selector de temporadas -->
 <div class="modal" id="playerModal">
     <div class="modal-content">
         <span class="close-btn" onclick="closePlayer()">×</span>
         <div class="video-container" id="videoContainer"></div>
-        <div class="episodes-section" id="episodesSection"></div>
+        <div class="modal-body">
+            <div class="season-selector-bar">
+                <h3 id="modalTitle" style="margin:0; color:var(--sky);">Temporadas y Episodios</h3>
+                <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)">
+                    <!-- Las temporadas se llenan dinámicamente -->
+                </select>
+            </div>
+            <div class="episodes-list" id="episodesList">
+                <!-- Los episodios se llenan dinámicamente -->
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-/* ============ BASE DE DATOS DE ANIMES ============ */
+/* ============ BASE DE DATOS CON PORTADAS REALES Y OFICIALES ============ */
 const ANIME = [
   {
     id: "naruto",
@@ -157,11 +187,24 @@ const ANIME = [
     g: "Shonen / Acción",
     y: 2002,
     r: "9.0",
-    d: "Un joven ninja que busca el reconocimiento de su aldea y sueña con convertirse en Hokage.",
-    img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1200&auto=format&fit=crop",
+    d: "Un joven ninja marginado busca el reconocimiento de su aldea y sueña con convertirse en Hokage.",
+    img: "https://m.media-amazon.com/images/M/MV5BZmQ5NGFiNWEtMmMyMC00MDdiLTg5YjktOGY5ZDc2MDU0YjIwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg",
     f: 1,
-    episodes: [
-      { title: "Episodio 1: ¡Entra! ¡Naruto Uzumaki!", videoUrl: "https://archive.org/download/nrt-01/NRT01.mp4" }
+    seasons: [
+      {
+        name: "Temporada 1",
+        episodes: [
+          { title: "Episodio 1: ¡Entra! ¡Naruto Uzumaki!", videoUrl: "https://archive.org/download/nrt-01/NRT01.mp4" },
+          { title: "Episodio 2: ¡Mi nombre es Konohamaru!", videoUrl: "" },
+          { title: "Episodio 3: ¡Sasuke y Sakura: Amigos o enemigos!", videoUrl: "" }
+        ]
+      },
+      {
+        name: "Temporada 2",
+        episodes: [
+          { title: "Episodio 1: ¡Próximamente temporada 2!", videoUrl: "" }
+        ]
+      }
     ]
   },
   {
@@ -170,31 +213,97 @@ const ANIME = [
     g: "Acción / Fantasía",
     y: 2019,
     r: "9.0",
-    d: "Tanjiro Kamado lucha contra temibles demonios para vengar a su familia y curar a su hermana.",
-    img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=1200&auto=format&fit=crop",
+    d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia y curar a su hermana.",
+    img: "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_FMjpg_UX1000_.jpg",
     f: 1,
-    episodes: []
+    seasons: [
+      {
+        name: "Temporada 1 (Kimetsu no Yaiba)",
+        episodes: [
+          { title: "Episodio 1: Crueldad", videoUrl: "" }
+        ]
+      }
+    ]
   },
   {
-    id: "scifi",
-    t: "Cyberpunk Series",
-    g: "Sci-Fi / Acción",
-    y: 2023,
+    id: "jujutsu",
+    t: "Jujutsu Kaisen",
+    g: "Sobrenatural",
+    y: 2020,
     r: "8.8",
-    d: "Explora mundos futuristas llenos de adrenalina, batallas épicas y misterios.",
-    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
+    d: "Un estudiante de preparatoria se traga un dedo maldito y se une a una organización secreta.",
+    img: "https://m.media-amazon.com/images/M/MV5BNGY4MTg3NzgtOWFkZi00YzVmLThmZjAtYzNmYjBmMDc0MWFjXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg",
     f: 1,
-    episodes: []
+    seasons: [
+      {
+        name: "Temporada 1",
+        episodes: [
+          { title: "Episodio 1: Ryomen Sukuna", videoUrl: "" }
+        ]
+      }
+    ]
   },
-  {id: "jujutsu", t: "Jujutsu Kaisen", g: "Sobrenatural", y: 2020, r: "8.8", img: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=600&auto=format&fit=crop", episodes:[]},
-  {id: "onepiece", t: "One Piece", g: "Aventura", y: 1999, r: "9.1", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop", episodes:[]},
-  {id: "frieren", t: "Frieren", g: "Fantasía", y: 2023, r: "9.3", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop", episodes:[]}
+  {
+    id: "onepiece",
+    t: "One Piece",
+    g: "Aventura",
+    y: 1999,
+    r: "9.1",
+    d: "Monkey D. Luffy zarpa con su tripulación pirata para encontrar el legendario tesoro One Piece.",
+    img: "https://m.media-amazon.com/images/M/MV5BODcwNWE3OTMtMDc3MS00NDFjLWE1OTAtNDAxNzYyOWIwMmUwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_FMjpg_UX1000_.jpg",
+    f: 0,
+    seasons: [
+      {
+        name: "East Blue (Temporada 1)",
+        episodes: [
+          { title: "Episodio 1: ¡Soy Luffy! ¡El hombre que será el Rey de los Piratas!", videoUrl: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "attack",
+    t: "Attack on Titan",
+    g: "Drama / Acción",
+    y: 2013,
+    r: "9.1",
+    d: "La humanidad vive protegida por enormes murallas para defenderse de mortales titanes devoradores de hombres.",
+    img: "https://m.media-amazon.com/images/M/MV5BNDFjYTIxMjctYTQwZC00ZDliLThjZDktODJlNTQ3ZGJjN2RjXkEyXkFqcGdeQXVyNTI4MzE4MDU@._V1_FMjpg_UX1000_.jpg",
+    f: 0,
+    seasons: [
+      {
+        name: "Temporada 1",
+        episodes: [
+          { title: "Episodio 1: Para ti, en 2000 años", videoUrl: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "sololeveling",
+    t: "Solo Leveling",
+    g: "Acción",
+    y: 2024,
+    r: "8.5",
+    d: "En un mundo lleno de portales y monstruos, el cazador más débil recibe un sistema secreto que lo hace evolucionar.",
+    img: "https://m.media-amazon.com/images/M/MV5BNGE2NmQ4ZjgtNTM5ZS00NWVjLWIyMGItMTBjN2NlZTRhMmQ1XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_FMjpg_UX1000_.jpg",
+    f: 0,
+    seasons: [
+      {
+        name: "Temporada 1",
+        episodes: [
+          { title: "Episodio 1: I'm Used to It", videoUrl: "" }
+        ]
+      }
+    ]
+  }
 ];
 
 const $ = (s) => document.querySelector(s);
 const byId = (id) => ANIME.find((x) => x.id === id);
+let currentAnime = null;
 
-/* ---------- Carrusel Automático e Interactivo ---------- */
+/* ---------- Carrusel Superior Automático ---------- */
 const feat = ANIME.filter((x) => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
   <section class="slide${i ? "" : " on"}" style="background-image: url('${x.img}')" aria-label="${x.t}">
@@ -227,7 +336,7 @@ $("#next").onclick = () => { go(cur + 1); play(); };
 dots.forEach((d, i) => (d.onclick = () => { go(i); play(); }));
 play();
 
-/* ---------- Renderizar Tarjetas del Catálogo ---------- */
+/* ---------- Renderizar Tarjetas con Portadas Oficiales ---------- */
 $("#grid").innerHTML = ANIME.map((x) => `
   <div class="card" onclick="openPlayer('${x.id}')" style="background-image:url('${x.img}')">
     <div class="art"></div>
@@ -238,37 +347,48 @@ $("#grid").innerHTML = ANIME.map((x) => `
     </div>
   </div>`).join("");
 
-/* ---------- Lógica del Modal y Reproductor ---------- */
+/* ---------- Lógica del Modal y Temporadas ---------- */
 function openPlayer(id) {
-    const anime = byId(id);
+    currentAnime = byId(id);
     const modal = document.getElementById('playerModal');
-    const epSection = document.getElementById('episodesSection');
+    const select = document.getElementById('seasonSelect');
     
-    epSection.innerHTML = `<h3>${anime.t} - Temporada 1</h3>`;
+    document.getElementById('modalTitle').textContent = currentAnime.t;
 
-    if (!anime.episodes || anime.episodes.length === 0) {
-        epSection.innerHTML += `<p style="color:var(--muted);">Próximamente más episodios disponibles...</p>`;
-        document.getElementById('videoContainer').innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;background:#000;"><h3>Próximamente en streaming</h3></div>`;
-    } else {
-        anime.episodes.forEach((ep) => {
-            const btn = document.createElement('button');
-            btn.className = 'ep-btn';
-            btn.textContent = ep.title;
-            btn.onclick = () => playEpisode(ep.videoUrl);
-            epSection.appendChild(btn);
-        });
-        // Reproducir automáticamente el primer episodio disponible
-        playEpisode(anime.episodes[0].videoUrl);
-    }
+    // Llenar el selector desplegable con las temporadas reales
+    select.innerHTML = currentAnime.seasons.map((season, index) => `
+        <option value="${index}">${season.name}</option>
+    `).join("");
+
+    // Cargar la temporada 1 por defecto
+    changeSeason(0);
     modal.style.display = 'flex';
 }
 
-function playEpisode(url) {
+function changeSeason(seasonIndex) {
+    const season = currentAnime.seasons[seasonIndex];
+    const epList = document.getElementById('episodesList');
+
+    epList.innerHTML = season.episodes.map((ep) => `
+        <button class="ep-btn" onclick="playEpisode('${ep.videoUrl}', '${ep.title}')">
+            <i class="fas fa-play-circle" style="color:var(--sky); margin-right:8px;"></i> ${ep.title}
+        </button>
+    `).join("");
+
+    // Reproducir el primer episodio automáticamente si tiene enlace
+    if(season.episodes[0].videoUrl) {
+        playEpisode(season.episodes[0].videoUrl, season.episodes[0].title);
+    } else {
+        document.getElementById('videoContainer').innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;background:#000;"><h3>Episodio próximamente disponible</h3></div>`;
+    }
+}
+
+function playEpisode(url, title) {
     const container = document.getElementById('videoContainer');
     if(url) {
         container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4">Tu navegador no soporta el video.</video>`;
     } else {
-        container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;"><h3>Video no disponible</h3></div>`;
+        container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;background:#000;"><h3>${title} - Próximamente</h3></div>`;
     }
 }
 
