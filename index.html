@@ -6,6 +6,8 @@
 <title>LATAnime – Streaming de Anime</title>
 <meta name="description" content="LATAnime: plataforma de streaming de anime en línea.">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<!-- Librería de Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --ink:#050508; --deep:#100d1a; --volt:#9d4edd; --sky:#00b4d8; --text:#ffffff; --muted:#94a3b8;
@@ -24,7 +26,9 @@ button{font:inherit;color:inherit;cursor:pointer}
   padding:18px clamp(18px,4vw,56px);background:rgba(5,5,8,0.7);backdrop-filter:blur(8px)}
 .logo{font-weight:900;font-style:italic;font-size:1.7rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
 .logo b{color:var(--volt)}
-.mylist{background:rgba(16,13,26,.9);border:1px solid rgba(157,78,221,0.3);border-radius:999px;padding:8px 16px;font-weight:600;text-decoration:none;color:var(--text)}
+.nav-buttons { display: flex; gap: 12px; align-items: center; }
+.mylist{background:rgba(16,13,26,.9);border:1px solid rgba(157,78,221,0.3);border-radius:999px;padding:8px 16px;font-weight:600;text-decoration:none;color:var(--text); cursor:pointer;}
+.mylist:hover { background: var(--volt); }
 
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s ease;
   display:flex;align-items:center;padding:0 clamp(18px,6vw,96px);background-size:cover;background-position:center}
@@ -62,7 +66,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card .card-info strong{display:block;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .card-info small{color:var(--muted);font-size:0.8rem}
 
-/* ---------- Modal Estilo Netflix ---------- */
+/* ---------- Modales ---------- */
 .modal {
     display: none; position: fixed; inset: 0; background: rgba(3,2,6,0.95);
     z-index: 100; justify-content: center; align-items: center; padding: 1.5rem; backdrop-filter: blur(10px);
@@ -74,6 +78,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 }
 .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer; z-index: 20; }
 .close-btn:hover { color: var(--sky); }
+
+.auth-box { max-width: 400px; padding: 2.5rem; text-align: center; }
+.auth-box h2 { margin-bottom: 20px; font-style: italic; color: var(--sky); }
+.auth-input { width: 100%; padding: 12px; margin-bottom: 15px; background: #1e1936; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; }
+.auth-btn { width: 100%; padding: 12px; background: var(--volt); border: none; border-radius: 8px; font-weight: bold; color: #fff; cursor: pointer; margin-bottom: 10px; }
+.auth-btn:hover { background: var(--sky); }
+.switch-auth { font-size: 0.85rem; color: var(--muted); cursor: pointer; }
+.switch-auth span { color: var(--sky); text-decoration: underline; }
 
 .anime-detail-header { display: flex; gap: 24px; padding: 2.5rem 2rem 2rem 2rem; flex-wrap: wrap; align-items: flex-start; }
 .anime-poster-img {
@@ -102,7 +114,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 <header class="hero">
   <nav class="nav">
     <a class="logo" href="#"><i class="fas fa-play-circle" style="color:var(--volt)"></i>LAT<b>Anime</b></a>
-    <a class="mylist" href="#catalogo">Catálogo</a>
+    <div class="nav-buttons">
+      <a class="mylist" href="#catalogo">Catálogo</a>
+      <button class="mylist" id="authNavBtn" onclick="openAuthModal()">Iniciar Sesión</button>
+    </div>
   </nav>
   <div id="slides"></div>
   <div class="ctrl">
@@ -118,6 +133,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="grid" id="grid"></div>
 </main>
 
+<!-- Modal de Detalle -->
 <div class="modal" id="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">×</span>
@@ -138,13 +154,90 @@ button{font:inherit;color:inherit;cursor:pointer}
     </div>
 </div>
 
+<!-- Modal de Autenticación -->
+<div class="modal" id="authModal">
+    <div class="modal-content auth-box">
+        <span class="close-btn" onclick="closeAuthModal()">×</span>
+        <h2 id="authTitle">Iniciar Sesión</h2>
+        <input type="email" id="authEmail" class="auth-input" placeholder="Correo electrónico">
+        <input type="password" id="authPassword" class="auth-input" placeholder="Contraseña">
+        <button class="auth-btn" onclick="handleAuth()" id="authSubmitBtn">Ingresar</button>
+        <p class="switch-auth" id="authSwitchText" onclick="toggleAuthMode()">¿No tienes cuenta? <span>Regístrate aquí</span></p>
+    </div>
+</div>
+
 <script>
+// ==========================================
+// CONFIGURACIÓN DE SUPABASE (Ya conectada)
+// ==========================================
+const SUPABASE_URL = 'https://qcdzrocrgzbffaqsdfbes.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_gi4itIPPY6NkzEK_YSWVQ_D2eGo...';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let isRegisterMode = false;
+
+function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+
+function toggleAuthMode() {
+    isRegisterMode = !isRegisterMode;
+    document.getElementById('authTitle').innerText = isRegisterMode ? 'Crear Cuenta' : 'Iniciar Sesión';
+    document.getElementById('authSubmitBtn').innerText = isRegisterMode ? 'Registrarse' : 'Ingresar';
+    document.getElementById('authSwitchText').innerHTML = isRegisterMode ? 
+        '¿Ya tienes cuenta? <span>Inicia sesión</span>' : 
+        '¿No tienes cuenta? <span>Regístrate aquí</span>';
+}
+
+async function handleAuth() {
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+
+    if(!email || !password) {
+        alert('Por favor completa todos los campos.');
+        return;
+    }
+
+    if (isRegisterMode) {
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        if (error) alert('Error al registrarse: ' + error.message);
+        else {
+            alert('¡Registro exitoso! Ya puedes iniciar sesión.');
+            toggleAuthMode();
+        }
+    } else {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) alert('Error al iniciar sesión: ' + error.message);
+        else {
+            alert('¡Bienvenido de nuevo!');
+            closeAuthModal();
+            checkUserSession();
+        }
+    }
+}
+
+async function checkUserSession() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+        document.getElementById('authNavBtn').innerText = 'Mi Cuenta';
+        document.getElementById('authNavBtn').onclick = async () => {
+            if(confirm('¿Deseas cerrar sesión?')) {
+                await supabaseClient.auth.signOut();
+                location.reload();
+            }
+        };
+    }
+}
+checkUserSession();
+
+// ==========================================
+// DATOS DE LOS ANIMES
+// ==========================================
 const ANIME = [
   {
     id: "naruto", t: "Naruto", g: "Shonen / Acción", y: 2002, r: "9.0",
     d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas y batallas intensas.",
     img: "naruto.jpg",
-    banner: "thumb-1920-647549.jpg", // Banner específico para Naruto
+    banner: "thumb-1920-647549.jpg",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [
@@ -157,7 +250,7 @@ const ANIME = [
     id: "demonslayer", t: "Demon Slayer", g: "Acción / Fantasía", y: 2019, r: "9.0",
     d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia masacrada por un demonio y curar a su hermana Nezuko.",
     img: "demonslayerr.jpg",
-    banner: "thumb-1920-1320541.png", // Banner específico para Demon Slayer
+    banner: "thumb-1920-1320541.png",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Crueldad", url: "" }] }
@@ -167,7 +260,7 @@ const ANIME = [
     id: "jujutsu", t: "Jujutsu Kaisen", g: "Sobrenatural", y: 2020, r: "8.8",
     d: "Yuji Itadori se une a una organización secreta de hechiceros tras ingerir un objeto maldito de categoría especial.",
     img: "jujutsu.webp",
-    banner: "wp4242704.jpg", // Banner específico para Jujutsu Kaisen
+    banner: "wp4242704.jpg",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Ryomen Sukuna", url: "" }] }
@@ -177,7 +270,7 @@ const ANIME = [
     id: "onepiece", t: "One Piece", g: "Aventura", y: 1999, r: "9.1",
     d: "Monkey D. Luffy zarpa con su tripulación en busca del legendario tesoro dejado por el Rey de los Piratas.",
     img: "onepiece.webp",
-    banner: "thumb-1920-833315.jpg", // Banner específico para One Piece
+    banner: "thumb-1920-833315.jpg",
     f: true,
     seasons: [
       { name: "East Blue", episodes: [{ title: "Episodio 1: ¡Soy Luffy!", url: "" }] }
@@ -187,7 +280,7 @@ const ANIME = [
     id: "attack", t: "Attack on Titan", g: "Drama / Acción", y: 2013, r: "9.1",
     d: "La humanidad sobrevive confinada tras enormes murallas para protegerse de gigantescos titanes devoradores de hombres.",
     img: "atakto.webp",
-    banner: "thumb-1920-1001038.jpg", // Banner específico para Attack on Titan
+    banner: "thumb-1920-1001038.jpg",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Para ti, en 2000 años", url: "" }] }
@@ -198,7 +291,7 @@ const ANIME = [
 const $ = s => document.querySelector(s);
 let currentAnime = null;
 
-// Carrusel (Usa la propiedad .banner correspondiente)
+// Carrusel
 const feat = ANIME.filter(x => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
   <section class="slide${i ? "" : " on"}" style="background-image: url('${x.banner}')">
@@ -223,7 +316,7 @@ const go = n => {
 timer = setInterval(() => go(cur + 1), 4000);
 dots.forEach((d, i) => d.onclick = () => { go(i); clearInterval(timer); });
 
-// Catálogo Grid (Usa la propiedad .img vertical)
+// Catálogo Grid
 $("#grid").innerHTML = ANIME.map(x => `
   <div class="card" onclick="openModal('${x.id}')" style="background-image: url('${x.img}')">
     <div class="art"></div>
