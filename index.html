@@ -85,6 +85,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 .switch-auth { font-size: 0.85rem; color: var(--muted); cursor: pointer; }
 .switch-auth span { color: var(--sky); text-decoration: underline; }
 
+/* Estilos para el panel de Cuenta / Historial */
+.account-box { max-width: 500px; padding: 2.5rem; }
+.account-box h2 { margin-top: 0; font-style: italic; color: var(--sky); margin-bottom: 15px; }
+.history-list { max-height: 180px; overflow-y: auto; background: #151124; border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); }
+.history-item { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
+.history-item:last-child { border-bottom: none; }
+
 .anime-detail-header { display: flex; gap: 24px; padding: 2.5rem 2rem 2rem 2rem; flex-wrap: wrap; align-items: flex-start; }
 .anime-poster-img {
     width: 200px; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px;
@@ -114,7 +121,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     <a class="logo" href="#"><i class="fas fa-play-circle" style="color:var(--volt)"></i>LAT<b>Anime</b></a>
     <div class="nav-buttons">
       <a class="mylist" href="#catalogo">Catálogo</a>
-      <button class="mylist" id="authNavBtn" onclick="openAuthModal()">Iniciar Sesión</button>
+      <button class="mylist" id="authNavBtn" onclick="handleNavAction()">Iniciar Sesión</button>
     </div>
   </nav>
   <div id="slides"></div>
@@ -131,7 +138,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Modal de Detalle -->
+<!-- Modal de Detalle de Anime -->
 <div class="modal" id="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">×</span>
@@ -164,14 +171,54 @@ button{font:inherit;color:inherit;cursor:pointer}
     </div>
 </div>
 
+<!-- Modal de Mi Cuenta e Historial -->
+<div class="modal" id="accountModal">
+    <div class="modal-content account-box">
+        <span class="close-btn" onclick="closeAccountModal()">×</span>
+        <h2>Mi Cuenta</h2>
+        <p style="color:var(--muted); font-size:0.9rem; margin-top:0;">Gestiona tu perfil y revisa lo que has visto.</p>
+        
+        <label style="font-size:0.85rem; font-weight:bold; color:var(--sky)">Tu Nombre de Perfil:</label>
+        <div style="display:flex; gap:10px; margin-top:5px; margin-bottom:20px;">
+            <input type="text" id="profileNameInput" class="auth-input" style="margin-bottom:0;" placeholder="Ej. OtakuGamer">
+            <button class="auth-btn" style="width:120px; margin-bottom:0;" onclick="saveProfileName()">Guardar</button>
+        </div>
+
+        <label style="font-size:0.85rem; font-weight:bold; color:var(--sky)">Historial de Reproducción:</label>
+        <div class="history-list" id="historyList">
+            <div style="color:var(--muted); font-size:0.85rem; text-align:center; padding:15px;">No hay reproducciones recientes.</div>
+        </div>
+
+        <button class="auth-btn" style="background:#d90429; margin-top:25px;" onclick="logout()">Cerrar Sesión</button>
+    </div>
+</div>
+
 <script>
 // ==========================================
-// SISTEMA DE AUTENTICACIÓN LOCAL SEGURO
+// SISTEMA DE SESIÓN, PERFIL E HISTORIAL
 // ==========================================
 let isRegisterMode = false;
 
+function handleNavAction() {
+    const user = localStorage.getItem('latanime_user');
+    if (user) {
+        openAccountModal();
+    } else {
+        openAuthModal();
+    }
+}
+
 function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
 function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+
+function openAccountModal() {
+    const user = localStorage.getItem('latanime_user');
+    const profileName = localStorage.getItem('latanime_profile_name') || user;
+    document.getElementById('profileNameInput').value = profileName;
+    renderHistory();
+    document.getElementById('accountModal').style.display = 'flex';
+}
+function closeAccountModal() { document.getElementById('accountModal').style.display = 'none'; }
 
 function toggleAuthMode() {
     isRegisterMode = !isRegisterMode;
@@ -197,36 +244,68 @@ function handleAuth() {
         toggleAuthMode();
     } else {
         localStorage.setItem('latanime_user', email);
-        alert('¡Bienvenido de nuevo, ' + email + '!');
+        localStorage.setItem('latanime_profile_name', email.split('@')[0]);
+        alert('¡Bienvenido de nuevo!');
         closeAuthModal();
         checkUserSession();
     }
 }
 
+function saveProfileName() {
+    const newName = document.getElementById('profileNameInput').value;
+    if(newName) {
+        localStorage.setItem('latanime_profile_name', newName);
+        alert('¡Nombre de perfil guardado con éxito!');
+        checkUserSession();
+    }
+}
+
+function recordHistory(animeTitle, epTitle) {
+    let history = JSON.parse(localStorage.getItem('latanime_history') || '[]');
+    const record = `${animeTitle} - ${epTitle}`;
+    // Evitar duplicar el último visto consecutivo
+    if (history.length === 0 || history[0] !== record) {
+        history.unshift(record);
+        if(history.length > 15) history.pop(); // Máximo 15 elementos
+        localStorage.setItem('latanime_history', JSON.stringify(history));
+    }
+}
+
+function renderHistory() {
+    const history = JSON.parse(localStorage.getItem('latanime_history') || '[]');
+    const container = document.getElementById('historyList');
+    if(history.length === 0) {
+        container.innerHTML = '<div style="color:var(--muted); font-size:0.85rem; text-align:center; padding:15px;">No hay reproducciones recientes.</div>';
+    } else {
+        container.innerHTML = history.map(item => `<div class="history-item"><span><i class="fas fa-history" style="color:var(--sky); margin-right:8px"></i>${item}</span></div>`).join('');
+    }
+}
+
+function logout() {
+    if(confirm('¿Deseas cerrar sesión?')) {
+        localStorage.removeItem('latanime_user');
+        location.reload();
+    }
+}
+
 function checkUserSession() {
     const user = localStorage.getItem('latanime_user');
+    const profileName = localStorage.getItem('latanime_profile_name') || user;
     if (user) {
-        const btn = document.getElementById('authNavBtn');
-        btn.innerText = 'Mi Cuenta';
-        btn.onclick = () => {
-            if(confirm('Sesión activa de: ' + user + '\n¿Deseas cerrar sesión?')) {
-                localStorage.removeItem('latanime_user');
-                location.reload();
-            }
-        };
+        document.getElementById('authNavBtn').innerText = profileName;
     }
 }
 checkUserSession();
 
 // ==========================================
-// DATOS DE LOS ANIMES
+// DATOS DE LOS ANIMES (Banners con sufijo 01)
 // ==========================================
 const ANIME = [
   {
     id: "naruto", t: "Naruto", g: "Shonen / Acción", y: 2002, r: "9.0",
     d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas y batallas intensas.",
     img: "naruto.jpg",
-    banner: "thumb-1920-647549.jpg",
+    banner: "naruto01.jpg", // Banner exacto vinculado con sufijo 01
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [
@@ -239,7 +318,7 @@ const ANIME = [
     id: "demonslayer", t: "Demon Slayer", g: "Acción / Fantasía", y: 2019, r: "9.0",
     d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia masacrada por un demonio y curar a su hermana Nezuko.",
     img: "demonslayerr.jpg",
-    banner: "thumb-1920-1320541.png",
+    banner: "demonslayer01.jpg", // Banner exacto vinculado con sufijo 01
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Crueldad", url: "" }] }
@@ -249,7 +328,7 @@ const ANIME = [
     id: "jujutsu", t: "Jujutsu Kaisen", g: "Sobrenatural", y: 2020, r: "8.8",
     d: "Yuji Itadori se une a una organización secreta de hechiceros tras ingerir un objeto maldito de categoría especial.",
     img: "jujutsu.webp",
-    banner: "wp4242704.jpg",
+    banner: "jujutsu01.jpg", // Banner exacto vinculado con sufijo 01
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Ryomen Sukuna", url: "" }] }
@@ -259,7 +338,7 @@ const ANIME = [
     id: "onepiece", t: "One Piece", g: "Aventura", y: 1999, r: "9.1",
     d: "Monkey D. Luffy zarpa con su tripulación en busca del legendario tesoro dejado por el Rey de los Piratas.",
     img: "onepiece.webp",
-    banner: "thumb-1920-833315.jpg",
+    banner: "onepiece01.jpg", // Banner exacto vinculado con sufijo 01
     f: true,
     seasons: [
       { name: "East Blue", episodes: [{ title: "Episodio 1: ¡Soy Luffy!", url: "" }] }
@@ -269,7 +348,7 @@ const ANIME = [
     id: "attack", t: "Attack on Titan", g: "Drama / Acción", y: 2013, r: "9.1",
     d: "La humanidad sobrevive confinada tras enormes murallas para protegerse de gigantescos titanes devoradores de hombres.",
     img: "atakto.webp",
-    banner: "thumb-1920-1001038.jpg",
+    banner: "attack01.jpg", // Banner exacto vinculado con sufijo 01
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Para ti, en 2000 años", url: "" }] }
@@ -345,6 +424,9 @@ function playEp(url, title, idx) {
     document.querySelectorAll(".ep-btn").forEach(b => b.classList.remove("active"));
     const btn = document.getElementById(`ep-${idx}`);
     if(btn) btn.classList.add("active");
+
+    // Guardar en el historial al reproducir
+    recordHistory(currentAnime.t, title);
 
     const box = $("#videoBox");
     if(url) {
