@@ -66,15 +66,15 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* ---------- Modales ---------- */
 .modal {
-    display: none; position: fixed; inset: 0; background: rgba(3,2,6,0.95);
-    z-index: 100; justify-content: center; align-items: center; padding: 1.5rem; backdrop-filter: blur(10px);
+    display: none; position: fixed; inset: 0; background: rgba(3,2,6,0.96);
+    z-index: 100; justify-content: center; align-items: center; padding: 1rem; backdrop-filter: blur(12px);
 }
 .modal-content {
-    background: var(--deep); width: 100%; max-width: 900px; max-height: 90vh;
-    border-radius: 16px; overflow-y: auto; position: relative; border: 1px solid var(--volt);
-    box-shadow: 0 0 50px rgba(157, 78, 221, 0.4);
+    background: var(--deep); width: 100%; max-width: 1050px; max-height: 92vh;
+    border-radius: 18px; overflow-y: auto; position: relative; border: 1px solid rgba(157, 78, 221, 0.4);
+    box-shadow: 0 0 60px rgba(0,0,0,0.8);
 }
-.close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer; z-index: 20; }
+.close-btn { position: absolute; top: 15px; right: 20px; font-size: 2.2rem; color: #fff; cursor: pointer; z-index: 30; }
 .close-btn:hover { color: var(--sky); }
 
 .auth-box { max-width: 400px; padding: 2.5rem; text-align: center; }
@@ -90,26 +90,54 @@ button{font:inherit;color:inherit;cursor:pointer}
 .account-box h2 { margin-top: 0; font-style: italic; color: var(--sky); margin-bottom: 15px; }
 .history-list { max-height: 180px; overflow-y: auto; background: #151124; border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); }
 .history-item { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
-.history-item:last-child { border-bottom: none; }
 
-.anime-detail-header { display: flex; gap: 24px; padding: 2.5rem 2rem 2rem 2rem; flex-wrap: wrap; align-items: flex-start; }
-.anime-poster-img {
-    width: 200px; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px;
-    border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 10px 25px rgba(0,0,0,0.7); flex-shrink: 0;
+/* ---------- Estilo Detalle Anime (Estilo Mega1080) ---------- */
+.anime-hero-bg {
+    position: relative; background-size: cover; background-position: center; padding: 3rem 2.5rem 2rem 2.5rem;
+    display: flex; gap: 30px; flex-wrap: wrap; align-items: flex-start;
 }
-.anime-info-text { flex: 1; min-width: 250px; }
-.anime-info-text h3 { margin: 0 0 8px 0; font-size: 2.2rem; font-style: italic; }
-.anime-info-text .meta { display: flex; gap: 10px; color: var(--sky); font-weight: 700; margin-bottom: 12px; font-size: 0.9rem; }
-.anime-info-text p { color: #d6e4ff; margin: 0; line-height: 1.6; }
+.anime-hero-bg::before {
+    content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, var(--deep) 0%, rgba(16,13,26,0.85) 60%, rgba(16,13,26,0.6) 100%);
+}
+.anime-poster-container { position: relative; z-index: 2; width: 220px; flex-shrink: 0; }
+.anime-poster-img {
+    width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 14px;
+    border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+}
+.anime-details-main { position: relative; z-index: 2; flex: 1; min-width: 280px; }
+.anime-details-main h2 { margin: 0 0 10px 0; font-size: 2.8rem; font-style: italic; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+.genre-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; list-style: none; padding: 0; }
+.genre-chips li { background: rgba(0, 180, 216, 0.2); border: 1px solid var(--sky); padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--sky); }
+.anime-details-main p { color: #d6e4ff; margin: 0 0 20px 0; font-size: 0.95rem; line-height: 1.6; }
 
-.episodes-section { padding: 0 2rem 2.5rem 2rem; }
-.season-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; }
-.season-select { background: #1e1936; color: #fff; border: 1px solid rgba(157,78,221,0.4); padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-.ep-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
-.ep-btn { background: #1e1936; color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: left; display: flex; justify-content: space-between; transition: 0.2s; }
-.ep-btn:hover, .ep-btn.active { background: var(--volt); border-color: var(--sky); }
+.info-box { background: rgba(5,5,8,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; margin-top: 15px; }
+.info-box h4 { margin: 0 0 10px 0; color: var(--sky); font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; font-size: 0.85rem; color: var(--muted); }
+.info-grid span b { color: #fff; }
 
-.video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; }
+.anime-body-section { padding: 2rem 2.5rem 3rem 2.5rem; }
+.section-title { font-size: 1.4rem; font-style: italic; font-weight: 800; margin: 0 0 15px 0; color: #fff; border-left: 4px solid var(--volt); padding-left: 10px; }
+
+/* Galería de imágenes / Banners */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-bottom: 30px; }
+.gallery-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+
+/* Selector de Temporadas y Episodios en Tarjetas Horizontales */
+.season-selector-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.season-select { background: #1e1936; color: #fff; border: 1px solid rgba(157,78,221,0.5); padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+.episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+.ep-card {
+    background: #151124; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden;
+    cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; text-align: left; padding: 0;
+}
+.ep-card:hover, .ep-card.active { border-color: var(--sky); transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,180,216,0.3); }
+.ep-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; }
+.ep-card-info { padding: 12px; }
+.ep-card-info strong { display: block; font-size: 0.95rem; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ep-card-info span { font-size: 0.8rem; color: var(--muted); }
+
+.video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
 .video-box video { width: 100%; height: 100%; border: none; }
 .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: #0b0914; color: var(--muted); text-align: center; padding: 20px; }
 </style>
@@ -138,21 +166,50 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Modal de Detalle de Anime -->
+<!-- Modal de Detalle Estilo Mega1080 -->
 <div class="modal" id="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">×</span>
-        <div class="anime-detail-header" id="modalHeader"></div>
-        <div class="episodes-section">
-            <div class="season-bar">
-                <h3 style="margin:0; color:var(--sky)">Episodios</h3>
+        
+        <!-- Cabecera Hero con Poster y Datos -->
+        <div class="anime-hero-bg" id="modalHeroBg">
+            <div class="anime-poster-container">
+                <img class="anime-poster-img" id="modalPoster" src="" alt="Poster">
+            </div>
+            <div class="anime-details-main">
+                <h2 id="modalTitle"></h2>
+                <ul class="genre-chips" id="modalGenres"></ul>
+                <p id="modalDesc"></p>
+
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> Información</h4>
+                    <div class="info-grid" id="modalInfoGrid">
+                        <span><b>Estudio:</b> MAPHA / Pierrot</span>
+                        <span><b>Estado:</b> En emisión</span>
+                        <span><b>Duración:</b> 24m</span>
+                        <span id="modalYearSpan"><b>Estreno:</b> 2002</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cuerpo con Galería y Episodios -->
+        <div class="anime-body-section">
+            <h3 class="section-title">Galería</h3>
+            <div class="gallery-grid" id="modalGallery"></div>
+
+            <div class="season-selector-bar">
+                <h3 class="section-title" style="margin:0; border:none; padding:0;">Episodios</h3>
                 <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
             </div>
-            <div class="ep-list" id="epList"></div>
+
+            <div class="episodes-grid" id="epList"></div>
+
+            <h3 class="section-title" style="margin-top: 30px;">Reproductor</h3>
             <div class="video-box" id="videoBox">
                 <div class="placeholder">
                     <i class="fas fa-film" style="font-size:2.5rem; color:var(--volt); margin-bottom:10px;"></i>
-                    <p style="margin:0">Selecciona un capítulo de la lista superior para reproducir.</p>
+                    <p style="margin:0">Selecciona un episodio de la lista superior para reproducir.</p>
                 </div>
             </div>
         </div>
@@ -173,14 +230,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 <!-- Modal de Mi Cuenta e Historial -->
 <div class="modal" id="accountModal">
-    <div class="modal-content account-box">
+    <div class="modal-content account-box" style="max-width:500px;">
         <span class="close-btn" onclick="closeAccountModal()">×</span>
         <h2>Mi Cuenta</h2>
-        <p style="color:var(--muted); font-size:0.9rem; margin-top:0;">Gestiona tu perfil y revisa lo que has visto.</p>
+        <p style="color:var(--muted); font-size:0.9rem; margin-top:0;">Gestiona tu perfil y revisa tu historial.</p>
         
         <label style="font-size:0.85rem; font-weight:bold; color:var(--sky)">Tu Nombre de Perfil:</label>
         <div style="display:flex; gap:10px; margin-top:5px; margin-bottom:20px;">
-            <input type="text" id="profileNameInput" class="auth-input" style="margin-bottom:0;" placeholder="Ej. OtakuGamer">
+            <input type="text" id="profileNameInput" class="auth-input" style="margin-bottom:0;" placeholder="Ej. Dans">
             <button class="auth-btn" style="width:120px; margin-bottom:0;" onclick="saveProfileName()">Guardar</button>
         </div>
 
@@ -195,26 +252,20 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 <script>
 // ==========================================
-// SISTEMA DE SESIÓN, PERFIL E HISTORIAL
+// SESIÓN, PERFIL E HISTORIAL
 // ==========================================
 let isRegisterMode = false;
 
 function handleNavAction() {
     const user = localStorage.getItem('latanime_user');
-    if (user) {
-        openAccountModal();
-    } else {
-        openAuthModal();
-    }
+    if (user) { openAccountModal(); } else { openAuthModal(); }
 }
 
 function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
 function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
-
 function openAccountModal() {
     const user = localStorage.getItem('latanime_user');
-    const profileName = localStorage.getItem('latanime_profile_name') || user;
-    document.getElementById('profileNameInput').value = profileName;
+    document.getElementById('profileNameInput').value = localStorage.getItem('latanime_profile_name') || user;
     renderHistory();
     document.getElementById('accountModal').style.display = 'flex';
 }
@@ -232,11 +283,7 @@ function toggleAuthMode() {
 function handleAuth() {
     const email = document.getElementById('authEmail').value;
     const password = document.getElementById('authPassword').value;
-
-    if(!email || !password) {
-        alert('Por favor completa todos los campos.');
-        return;
-    }
+    if(!email || !password) { alert('Por favor completa todos los campos.'); return; }
 
     if (isRegisterMode) {
         localStorage.setItem('latanime_user', email);
@@ -255,7 +302,7 @@ function saveProfileName() {
     const newName = document.getElementById('profileNameInput').value;
     if(newName) {
         localStorage.setItem('latanime_profile_name', newName);
-        alert('¡Nombre de perfil guardado con éxito!');
+        alert('¡Nombre guardado con éxito!');
         checkUserSession();
     }
 }
@@ -281,66 +328,60 @@ function renderHistory() {
 }
 
 function logout() {
-    if(confirm('¿Deseas cerrar sesión?')) {
-        localStorage.removeItem('latanime_user');
-        location.reload();
-    }
+    if(confirm('¿Deseas cerrar sesión?')) { localStorage.removeItem('latanime_user'); location.reload(); }
 }
 
 function checkUserSession() {
     const user = localStorage.getItem('latanime_user');
-    const profileName = localStorage.getItem('latanime_profile_name') || user;
-    if (user) {
-        document.getElementById('authNavBtn').innerText = profileName;
-    }
+    if (user) { document.getElementById('authNavBtn').innerText = localStorage.getItem('latanime_profile_name') || user; }
 }
 checkUserSession();
 
 // ==========================================
-// DATOS DE LOS ANIMES (Banners con sufijo 01)
+// DATOS DE LOS ANIMES
 // ==========================================
 const ANIME = [
   {
-    id: "naruto", t: "Naruto", g: "Shonen / Acción", y: 2002, r: "9.0",
+    id: "naruto", t: "Naruto", g: ["Shonen", "Acción", "Artes Marciales"], y: 2002, r: "9.0",
     d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas y batallas intensas.",
     img: "naruto.jpg",
     banner: "naruto01.jpg",
     f: true,
     seasons: [
       { name: "Temporada 1", episodes: [
-        { title: "Episodio 1: ¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4" },
-        { title: "Episodio 2: ¡Mi nombre es Konohamaru!", url: "" }
+        { title: "Episodio 1", subtitle: "¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4", thumb: "naruto.jpg" },
+        { title: "Episodio 2", subtitle: "¡Mi nombre es Konohamaru!", url: "", thumb: "naruto.jpg" }
       ]}
     ]
   },
   {
-    id: "demonslayer", t: "Demon Slayer", g: "Acción / Fantasía", y: 2019, r: "9.0",
+    id: "demonslayer", t: "Demon Slayer", g: ["Acción", "Fantasía", "Sobrenatural"], y: 2019, r: "9.0",
     d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia masacrada por un demonio y curar a su hermana Nezuko.",
     img: "demonslayerr.jpg",
     banner: "demonslayer01.jpg",
     f: true,
     seasons: [
-      { name: "Temporada 1", episodes: [{ title: "Episodio 1: Crueldad", url: "" }] }
+      { name: "Temporada 1", episodes: [{ title: "Episodio 1", subtitle: "Crueldad", url: "", thumb: "demonslayerr.jpg" }] }
     ]
   },
   {
-    id: "jujutsu", t: "Jujutsu Kaisen", g: "Sobrenatural", y: 2020, r: "8.8",
+    id: "jujutsu", t: "Jujutsu Kaisen", g: ["Acción", "Sobrenatural", "Escolar"], y: 2020, r: "8.8",
     d: "Yuji Itadori se une a una organización secreta de hechiceros tras ingerir un objeto maldito de categoría especial.",
     img: "jujutsu.webp",
     banner: "jujutsu01.jpg",
     f: true,
     seasons: [
-      { name: "Temporada 1", episodes: [{ title: "Episodio 1: Ryomen Sukuna", url: "" }] }
+      { name: "Temporada 1", episodes: [{ title: "Episodio 1", subtitle: "Ryomen Sukuna", url: "", thumb: "jujutsu.webp" }] }
     ]
   },
   {
-    id: "onepiece", t: "One Piece", g: "Aventura", y: 1999, r: "9.1",
+    id: "onepiece", t: "One Piece", g: ["Aventura", "Acción", "Fantasía"], y: 1999, r: "9.1",
     d: "Monkey D. Luffy zarpa con su tripulación en busca del legendario tesoro dejado por el Rey de los Piratas.",
     img: "onepiece.webp",
     banner: "onepiece01.jpg",
     f: true,
     seasons: [
-      { name: "East Blue", episodes: [{ title: "Episodio 1: ¡Soy Luffy!", url: "" }] }
+      { name: "East Blue", episodes: [{ title: "Episodio 1", subtitle: "¡Soy Luffy!", url: "", thumb: "onepiece.webp" }] }
     ]
   },
   {
@@ -350,7 +391,7 @@ const ANIME = [
     banner: "attack01.jpg",
     f: true,
     seasons: [
-      { name: "Temporada 1", episodes: [{ title: "Episodio 1: Para ti, en 2000 años", url: "" }] }
+      { name: "Temporada 1", episodes: [{ title: "Episodio 1", subtitle: "Para ti, en 2000 años", url: "", thumb: "atakto.webp" }] }
     ]
   }
 ];
@@ -363,7 +404,7 @@ const feat = ANIME.filter(x => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
   <section class="slide${i ? "" : " on"}" style="background-image: url('${x.banner}')">
     <div class="copy">
-      <ul class="chips"><li class="rate">★ ${x.r}</li><li>${x.g}</li><li>${x.y}</li></ul>
+      <ul class="chips"><li class="rate">★ ${x.r}</li><li>${Array.isArray(x.g)? x.g[0]: x.g}</li><li>${x.y}</li></ul>
       <h2>${x.t}</h2>
       <p>${x.d}</p>
       <button class="btn" onclick="openModal('${x.id}')"><i class="fas fa-play"></i> Ver Episodios</button>
@@ -390,20 +431,29 @@ $("#grid").innerHTML = ANIME.map(x => `
     <span class="star">★ ${x.r}</span>
     <div class="card-info">
       <strong>${x.t}</strong>
-      <small>${x.g} • ${x.y}</small>
+      <small>${Array.isArray(x.g)? x.g[0]: x.g} • ${x.y}</small>
     </div>
   </div>`).join("");
 
 function openModal(id) {
     currentAnime = ANIME.find(x => x.id === id);
-    $("#modalHeader").innerHTML = `
-        <img class="anime-poster-img" src="${currentAnime.img}" alt="${currentAnime.t}">
-        <div class="anime-info-text">
-            <h3>${currentAnime.t}</h3>
-            <div class="meta"><span>★ ${currentAnime.r}</span><span>•</span><span>${currentAnime.g}</span><span>•</span><span>${currentAnime.y}</span></div>
-            <p>${currentAnime.d}</p>
-        </div>
+    
+    // Rellenar cabecera tipo Mega1080
+    $("#modalHeroBg").style.backgroundImage = `url('${currentAnime.banner}')`;
+    $("#modalPoster").src = currentAnime.img;
+    $("#modalTitle").innerText = `${currentAnime.t} (${currentAnime.y})`;
+    
+    const genres = Array.isArray(currentAnime.g) ? currentAnime.g : [currentAnime.g];
+    $("#modalGenres").innerHTML = genres.map(g => `<li>${g}</li>`).join("");
+    $("#modalDesc").innerText = currentAnime.d;
+    $("#modalYearSpan").innerHTML = `<b>Estreno:</b> ${currentAnime.y}`;
+
+    // Galería de imágenes de relleno (usando el poster y banner)
+    $("#modalGallery").innerHTML = `
+        <img class="gallery-img" src="${currentAnime.banner}" alt="Galeria 1">
+        <img class="gallery-img" src="${currentAnime.img}" alt="Galeria 2">
     `;
+
     resetVideo();
     $("#seasonSelect").innerHTML = currentAnime.seasons.map((s, i) => `<option value="${i}">${s.name}</option>`).join("");
     changeSeason(0);
@@ -413,16 +463,19 @@ function openModal(id) {
 function changeSeason(idx) {
     const s = currentAnime.seasons[idx];
     $("#epList").innerHTML = s.episodes.map((ep, i) => `
-        <button class="ep-btn" id="ep-${i}" onclick="playEp('${ep.url}', '${ep.title}', ${i})">
-            <span><i class="fas fa-play-circle" style="color:var(--sky); margin-right:8px"></i>${ep.title}</span>
-            <span style="font-size:0.8rem; opacity:0.7">Reproducir</span>
-        </button>`).join("");
+        <div class="ep-card" id="ep-${i}" onclick="playEp('${ep.url}', '${ep.title}: ${ep.subtitle}', ${i})">
+            <img class="ep-thumb" src="${ep.thumb}" alt="${ep.title}">
+            <div class="ep-card-info">
+                <strong>${ep.title}</strong>
+                <span>${ep.subtitle}</span>
+            </div>
+        </div>`).join("");
 }
 
 function playEp(url, title, idx) {
-    document.querySelectorAll(".ep-btn").forEach(b => b.classList.remove("active"));
-    const btn = document.getElementById(`ep-${idx}`);
-    if(btn) btn.classList.add("active");
+    document.querySelectorAll(".ep-card").forEach(b => b.classList.remove("active"));
+    const card = document.getElementById(`ep-${idx}`);
+    if(card) card.classList.add("active");
 
     recordHistory(currentAnime.t, title);
 
@@ -443,7 +496,7 @@ function resetVideo() {
     $("#videoBox").innerHTML = `
         <div class="placeholder">
             <i class="fas fa-film" style="font-size:2.5rem; color:var(--volt); margin-bottom:10px;"></i>
-            <p style="margin:0">Selecciona un capítulo de la lista superior para reproducir.</p>
+            <p style="margin:0">Selecciona un episodio de la lista superior para reproducir.</p>
         </div>`;
 }
 
