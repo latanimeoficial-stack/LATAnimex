@@ -27,9 +27,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 .mylist{background:rgba(16,13,26,.9);border:1px solid rgba(157,78,221,0.3);border-radius:999px;padding:8px 16px;font-weight:600;text-decoration:none;color:var(--text)}
 
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s ease;
-  display:flex;align-items:center;padding:0 clamp(18px,6vw,96px)}
+  display:flex;align-items:center;padding:0 clamp(18px,6vw,96px);background-size:cover;background-position:center}
 .slide.on{opacity:1;visibility:visible}
-.slide::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,8,0.95) 20%,rgba(5,5,8,0.4) 80%)}
+.slide::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,8,0.95) 25%,rgba(5,5,8,0.3) 80%)}
 .copy{position:relative;z-index:2;max-width:600px}
 .copy h2{margin:0 0 10px;font-size:clamp(2.2rem,5vw,4rem);font-weight:900;font-style:italic;text-shadow:0 4px 20px rgba(0,0,0,.8)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;padding:0;list-style:none}
@@ -43,23 +43,23 @@ button{font:inherit;color:inherit;cursor:pointer}
 .dots button{width:12px;height:12px;border-radius:99px;border:0;background:rgba(255,255,255,.3);transition:all .3s}
 .dots button[aria-current="true"]{width:32px;background:var(--sky)}
 
-/* ---------- Catálogo Grid con Portadas Temáticas ---------- */
+/* ---------- Catálogo Grid ---------- */
 .catalog{padding:3rem clamp(18px,4vw,56px) 100px;flex:1}
 .head h1{margin:0 0 5px;font-size:2rem;font-style:italic;font-weight:900}
 .head p{margin:0 0 20px;color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px}
 
 .card{
-  position:relative;aspect-ratio:2/3;border:0;padding:16px;text-align:center;border-radius:14px;
-  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+  position:relative;aspect-ratio:2/3;border:0;padding:0;text-align:left;border-radius:14px;overflow:hidden;
+  background-size:cover;background-position:center;background-color:var(--deep);
   box-shadow:0 10px 25px rgba(0,0,0,.5);transition:transform .2s,box-shadow .2s;cursor:pointer;
-  border:1px solid rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.1);display:flex;flex-direction:column;justify-content:flex-end;
 }
+.card .art{position:absolute;inset:0;background:linear-gradient(180deg, transparent 50%, rgba(5,5,8,0.9) 100%)}
 .card:hover{transform:translateY(-6px);box-shadow:0 0 30px rgba(157,78,221,0.6)}
-.card .star{position:absolute;top:10px;left:10px;padding:2px 8px;border-radius:99px;background:rgba(0,0,0,0.7);font-size:.75rem;font-weight:700}
-.card .card-title{font-size:1.4rem;font-weight:900;font-style:italic;text-transform:uppercase;margin:auto 0;text-shadow:0 3px 10px rgba(0,0,0,0.8)}
-.card .card-info{background:rgba(0,0,0,0.6);width:100%;padding:8px;border-radius:8px;backdrop-filter:blur(4px)}
-.card .card-info strong{display:block;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .star{position:absolute;top:10px;left:10px;padding:2px 8px;border-radius:99px;background:rgba(0,0,0,0.8);font-size:.75rem;font-weight:700;z-index:2}
+.card .card-info{position:relative;z-index:2;padding:12px;width:100%}
+.card .card-info strong{display:block;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .card-info small{color:var(--muted);font-size:0.8rem}
 
 /* ---------- Modal Estilo Netflix ---------- */
@@ -75,13 +75,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer; z-index: 20; }
 .close-btn:hover { color: var(--sky); }
 
-.anime-detail-header { display: flex; gap: 24px; padding: 2.5rem 2rem 2rem 2rem; flex-wrap: wrap; align-items: center; }
-.anime-poster-custom {
-    width: 190px; aspect-ratio: 2/3; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2);
-    display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.7); flex-shrink: 0;
+.anime-detail-header { display: flex; gap: 24px; padding: 2.5rem 2rem 2rem 2rem; flex-wrap: wrap; align-items: flex-start; }
+.anime-poster-img {
+    width: 200px; aspect-ratio: 2/3; object-fit: cover; border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 10px 25px rgba(0,0,0,0.7); flex-shrink: 0;
 }
-.anime-poster-custom h2 { font-size: 1.5rem; font-weight: 900; font-style: italic; margin: 10px 0 0 0; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
 .anime-info-text { flex: 1; min-width: 250px; }
 .anime-info-text h3 { margin: 0 0 8px 0; font-size: 2.2rem; font-style: italic; }
 .anime-info-text .meta { display: flex; gap: 10px; color: var(--sky); font-weight: 700; margin-bottom: 12px; font-size: 0.9rem; }
@@ -145,7 +143,7 @@ const ANIME = [
   {
     id: "naruto", t: "Naruto", g: "Shonen / Acción", y: 2002, r: "9.0",
     d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas y batallas intensas.",
-    bg: "linear-gradient(135deg, #ff6b00 0%, #1a0800 100%)", f: true,
+    img: "naruto.jpg", f: true, // <--- Aquí ya está apuntando a tu foto subida
     seasons: [
       { name: "Temporada 1", episodes: [
         { title: "Episodio 1: ¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4" },
@@ -156,7 +154,7 @@ const ANIME = [
   {
     id: "demonslayer", t: "Demon Slayer", g: "Acción / Fantasía", y: 2019, r: "9.0",
     d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia masacrada por un demonio y curar a su hermana Nezuko.",
-    bg: "linear-gradient(135deg, #0f4c3a 0%, #3a0303 100%)", f: true,
+    img: "", f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Crueldad", url: "" }] }
     ]
@@ -164,7 +162,7 @@ const ANIME = [
   {
     id: "jujutsu", t: "Jujutsu Kaisen", g: "Sobrenatural", y: 2020, r: "8.8",
     d: "Yuji Itadori se une a una organización secreta de hechiceros tras ingerir un objeto maldito de categoría especial.",
-    bg: "linear-gradient(135deg, #560bad 0%, #0b021a 100%)", f: true,
+    img: "", f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Ryomen Sukuna", url: "" }] }
     ]
@@ -172,7 +170,7 @@ const ANIME = [
   {
     id: "onepiece", t: "One Piece", g: "Aventura", y: 1999, r: "9.1",
     d: "Monkey D. Luffy zarpa con su tripulación en busca del legendario tesoro dejado por el Rey de los Piratas.",
-    bg: "linear-gradient(135deg, #0077b6 0%, #030a1a 100%)", f: true,
+    img: "", f: true,
     seasons: [
       { name: "East Blue", episodes: [{ title: "Episodio 1: ¡Soy Luffy!", url: "" }] }
     ]
@@ -180,17 +178,9 @@ const ANIME = [
   {
     id: "attack", t: "Attack on Titan", g: "Drama / Acción", y: 2013, r: "9.1",
     d: "La humanidad sobrevive confinada tras enormes murallas para protegerse de gigantescos titanes devoradores de hombres.",
-    bg: "linear-gradient(135deg, #4a3525 0%, #111111 100%)", f: true,
+    img: "", f: true,
     seasons: [
       { name: "Temporada 1", episodes: [{ title: "Episodio 1: Para ti, en 2000 años", url: "" }] }
-    ]
-  },
-  {
-    id: "sololeveling", t: "Solo Leveling", g: "Acción", y: 2024, r: "8.5",
-    d: "El cazador más débil de la humanidad recibe una extraña misión que le otorga el poder único de subir de nivel.",
-    bg: "linear-gradient(135deg, #00b4d8 0%, #030814 100%)", f: false,
-    seasons: [
-      { name: "Temporada 1", episodes: [{ title: "Episodio 1: Me he acostumbrado", url: "" }] }
     ]
   }
 ];
@@ -201,7 +191,7 @@ let currentAnime = null;
 // Carrusel
 const feat = ANIME.filter(x => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
-  <section class="slide${i ? "" : " on"}" style="background: ${x.bg}">
+  <section class="slide${i ? "" : " on"}" style="background-image: url('${x.img || ""}')">
     <div class="copy">
       <ul class="chips"><li class="rate">★ ${x.r}</li><li>${x.g}</li><li>${x.y}</li></ul>
       <h2>${x.t}</h2>
@@ -223,11 +213,11 @@ const go = n => {
 timer = setInterval(() => go(cur + 1), 6000);
 dots.forEach((d, i) => d.onclick = () => { go(i); clearInterval(timer); });
 
-// Catálogo Grid con portadas temáticas limpiecitas
+// Catálogo Grid
 $("#grid").innerHTML = ANIME.map(x => `
-  <div class="card" onclick="openModal('${x.id}')" style="background: ${x.bg}">
+  <div class="card" onclick="openModal('${x.id}')" style="background-image: url('${x.img || ""}')">
+    <div class="art"></div>
     <span class="star">★ ${x.r}</span>
-    <div class="card-title">${x.t}</div>
     <div class="card-info">
       <strong>${x.t}</strong>
       <small>${x.g} • ${x.y}</small>
@@ -237,10 +227,7 @@ $("#grid").innerHTML = ANIME.map(x => `
 function openModal(id) {
     currentAnime = ANIME.find(x => x.id === id);
     $("#modalHeader").innerHTML = `
-        <div class="anime-poster-custom" style="background: ${currentAnime.bg}">
-            <i class="fas fa-tv" style="font-size:2rem; opacity:0.8;"></i>
-            <h2>${currentAnime.t}</h2>
-        </div>
+        <img class="anime-poster-img" src="${currentAnime.img || ''}" alt="${currentAnime.t}">
         <div class="anime-info-text">
             <h3>${currentAnime.t}</h3>
             <div class="meta"><span>★ ${currentAnime.r}</span><span>•</span><span>${currentAnime.g}</span><span>•</span><span>${currentAnime.y}</span></div>
