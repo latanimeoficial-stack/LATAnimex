@@ -71,7 +71,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card .star{position:absolute;top:10px;left:10px;padding:2px 9px;border-radius:99px;background:rgba(7,6,11,.8);font-size:.78rem;font-weight:700;z-index:2}
 .card:hover{transform:translateY(-4px);border:1px solid var(--volt)}
 
-/* ---------- Modal Estilo Netflix (Izquierda Portada, Derecha Sinopsis) ---------- */
+/* ---------- Modal Estilo Netflix (Portada Izquierda, Sinopsis Derecha) ---------- */
 .modal {
     display: none;
     position: fixed;
@@ -221,7 +221,7 @@ button{font:inherit;color:inherit;cursor:pointer}
                 <!-- Se cargan dinámicamente -->
             </div>
 
-            <!-- Reproductor de Video (Solo arranca al hacer clic en un capítulo) -->
+            <!-- Reproductor de Video -->
             <div class="video-container" id="videoContainer">
                 <div class="placeholder-box">
                     <i class="fas fa-film" style="font-size:3rem; color:var(--volt); margin-bottom:10px;"></i>
@@ -233,7 +233,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 </div>
 
 <script>
-/* ============ BASE DE DATOS CON PORTADAS OFICIALES Y MÁS EN EL CARRUSEL (f: 1) ============ */
+/* ============ BASE DE DATOS CON ENLACES DE IMAGEN LIBRES Y ESTABLES ============ */
 const ANIME = [
   {
     id: "naruto",
@@ -242,8 +242,8 @@ const ANIME = [
     y: 2002,
     r: "9.0",
     d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca desesperadamente el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas, batallas intensas y descubriendo los oscuros secretos de su propio pasado y del mundo shinobi.",
-    img: "https://m.media-amazon.com/images/I/81x2859uKdL._AC_UF894,1000_QL80_.jpg",
-    f: 1, // Destacado en el carrusel superior
+    img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop",
+    f: 1,
     seasons: [
       {
         name: "Temporada 1",
@@ -268,8 +268,8 @@ const ANIME = [
     y: 2019,
     r: "9.0",
     d: "Tanjiro Kamado ve su vida destrozada cuando un demonio masacra a su familia y convierte a su hermana Nezuko en una criatura sedienta de sangre. Decidido a vengarlos y encontrar una cura, se une al Cuerpo de Cazadores de Demonios.",
-    img: "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_FMjpg_UX1000_.jpg",
-    f: 1, // Destacado en el carrusel superior
+    img: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop",
+    f: 1,
     seasons: [
       {
         name: "Temporada 1 (Kimetsu no Yaiba)",
@@ -286,8 +286,8 @@ const ANIME = [
     y: 2020,
     r: "8.8",
     d: "Yuji Itadori es un estudiante común con una fuerza física descomunal que se ve envuelto en el mundo oculto de las maldiciones tras ingerir el dedo podrido de Sukuna, el Rey de las Maldiciones, contrayendo un pacto mortal.",
-    img: "https://m.media-amazon.com/images/M/MV5BNGY4MTg3NzgtOWFkZi00YzVmLThmZjAtYzNmYjBmMDc0MWFjXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg",
-    f: 1, // Destacado en el carrusel superior
+    img: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=800&auto=format&fit=crop",
+    f: 1,
     seasons: [
       {
         name: "Temporada 1",
@@ -304,8 +304,8 @@ const ANIME = [
     y: 1999,
     r: "9.1",
     d: "Acompaña a Monkey D. Luffy y a su colorida tripulación de piratas en una gran travesía a través del Grand Line en busca del legendario tesoro dejado por el difunto Rey de los Piratas, Gol D. Roger: el One Piece.",
-    img: "https://m.media-amazon.com/images/M/MV5BODcwNWE3OTMtMDc3MS00NDFjLWE1OTAtNDAxNzYyOWIwMmUwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_FMjpg_UX1000_.jpg",
-    f: 1, // Destacado en el carrusel superior
+    img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=800&auto=format&fit=crop",
+    f: 1,
     seasons: [
       {
         name: "East Blue (Temporada 1)",
@@ -322,8 +322,8 @@ const ANIME = [
     y: 2013,
     r: "9.1",
     d: "Para escapar de la extinción a manos de gigantescos humanoides devoradores llamados Titanes, la humanidad sobrevive confinada detrás de tres enormes murallas concéntricas, hasta que un día una brecha lo cambia todo.",
-    img: "https://m.media-amazon.com/images/M/MV5BNDFjYTIxMjctYTQwZC00ZDliLThjZDktODJlNTQ3ZGJjN2RjXkEyXkFqcGdeQXVyNTI4MzE4MDU@._V1_FMjpg_UX1000_.jpg",
-    f: 1, // Destacado en el carrusel superior
+    img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop",
+    f: 1,
     seasons: [
       {
         name: "Temporada 1",
@@ -340,7 +340,7 @@ const ANIME = [
     y: 2024,
     r: "8.5",
     d: "En un mundo donde portales conectan la realidad con mazmorras llenas de monstruos, Sung Jinwoo, conocido como el cazador más débil de la humanidad, recibe una extraña misión que le otorga el poder único de subir de nivel.",
-    img: "https://m.media-amazon.com/images/M/MV5BNGE2NmQ4ZjgtNTM5ZS00NWVjLWIyMGItMTBjN2NlZTRhMmQ1XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_FMjpg_UX1000_.jpg",
+    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
     f: 0,
     seasons: [
       {
@@ -357,7 +357,7 @@ const $ = (s) => document.querySelector(s);
 const byId = (id) => ANIME.find((x) => x.id === id);
 let currentAnime = null;
 
-/* ---------- Carrusel Superior Automático (Muestra todos los marcados con f: 1) ---------- */
+/* ---------- Carrusel Superior Automático ---------- */
 const feat = ANIME.filter((x) => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
   <section class="slide${i ? "" : " on"}" style="background-image: url('${x.img}')" aria-label="${x.t}">
@@ -390,7 +390,7 @@ $("#next").onclick = () => { go(cur + 1); play(); };
 dots.forEach((d, i) => (d.onclick = () => { go(i); play(); }));
 play();
 
-/* ---------- Renderizar Tarjetas del Catálogo con Portadas Oficiales ---------- */
+/* ---------- Renderizar Tarjetas del Catálogo ---------- */
 $("#grid").innerHTML = ANIME.map((x) => `
   <div class="card" onclick="openPlayer('${x.id}')" style="background-image:url('${x.img}')">
     <div class="art"></div>
@@ -401,14 +401,13 @@ $("#grid").innerHTML = ANIME.map((x) => `
     </div>
   </div>`).join("");
 
-/* ---------- Lógica del Modal Estilo Netflix (Portada Izquierda, Sinopsis Derecha) ---------- */
+/* ---------- Lógica del Modal Estilo Netflix ---------- */
 function openPlayer(id) {
     currentAnime = byId(id);
     const modal = document.getElementById('playerModal');
     const header = document.getElementById('animeHeader');
     const select = document.getElementById('seasonSelect');
 
-    // 1. Cabecera: Izquierda Portada grande / Derecha Sinopsis detallada
     header.innerHTML = `
         <div class="anime-poster-large" style="background-image: url('${currentAnime.img}')"></div>
         <div class="anime-info-text">
@@ -424,10 +423,8 @@ function openPlayer(id) {
         </div>
     `;
 
-    // 2. Mantener el reproductor en espera (sin arrancar solo)
     resetVideoPlaceholder();
 
-    // 3. Llenar temporadas en el menú desplegable
     select.innerHTML = currentAnime.seasons.map((season, index) => `
         <option value="${index}">${season.name}</option>
     `).join("");
@@ -465,7 +462,6 @@ function playEpisode(url, title, index) {
     if(currentBtn) currentBtn.classList.add('active');
 
     if(url) {
-        // Solo aquí se lanza el video cuando el usuario elige el capítulo
         container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4">Tu navegador no soporta el video.</video>`;
     } else {
         container.innerHTML = `
