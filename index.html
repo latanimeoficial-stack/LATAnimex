@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LATAnimex – Streaming de Anime</title>
-<meta name="description" content="LATAnimex: plataforma de streaming. Elige tus series y mira tus episodios.">
+<meta name="description" content="LATAnimex: plataforma de streaming de anime en línea.">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
 :root{
@@ -71,40 +71,68 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card .star{position:absolute;top:10px;left:10px;padding:2px 9px;border-radius:99px;background:rgba(7,6,11,.8);font-size:.78rem;font-weight:700;z-index:2}
 .card:hover{transform:translateY(-4px);border:1px solid var(--volt)}
 
-/* ---------- Modal / Ventana Flotante ---------- */
+/* ---------- Modal Estilo Netflix (Sinopsis, Portada y Lista) ---------- */
 .modal {
     display: none;
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(4, 3, 7, 0.94);
+    background: rgba(4, 3, 7, 0.95);
     z-index: 100;
     justify-content: center;
     align-items: center;
     padding: 1.5rem;
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
 }
 .modal-content {
     background: var(--deep);
-    width: 100%; max-width: 850px;
+    width: 100%; max-width: 950px;
+    max-height: 90vh;
     border-radius: 16px;
-    overflow: hidden;
+    overflow-y: auto;
     position: relative;
     border: 1px solid var(--volt);
-    box-shadow: 0 0 40px rgba(157, 78, 221, 0.4);
+    box-shadow: 0 0 50px rgba(157, 78, 221, 0.4);
 }
 .close-btn {
     position: absolute;
     top: 15px; right: 20px;
     font-size: 2rem; color: #fff;
-    cursor: pointer; z-index: 10;
+    cursor: pointer; z-index: 20;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
 .close-btn:hover { color: var(--sky); }
-.video-container { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
-.video-container video { width: 100%; height: 100%; border: none; }
 
-.modal-body { padding: 1.5rem; }
+/* Detalle principal del anime (Portada grande + Sinopsis) */
+.anime-detail-header {
+    display: flex;
+    gap: 24px;
+    padding: 2.5rem 2rem 1.5rem 2rem;
+    background: linear-gradient(180deg, rgba(157, 78, 221, 0.15), transparent);
+    flex-wrap: wrap;
+}
+.anime-poster-large {
+    width: 200px;
+    aspect-ratio: 2/3;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    border: 1px solid var(--line);
+    flex-shrink: 0;
+}
+.anime-info-text {
+    flex: 1;
+    min-width: 260px;
+}
+.anime-info-text h2 { margin: 0 0 10px 0; font-size: 2.2rem; color: #fff; font-style: italic; }
+.anime-info-text .meta-tags { display: flex; gap: 10px; margin-bottom: 12px; font-size: 0.9rem; color: var(--sky); font-weight: 700; }
+.anime-info-text p { color: #d6e4ff; line-height: 1.6; margin: 0; font-size: 1rem; }
+
+/* Sección de episodios y reproductor */
+.episodes-section-box {
+    padding: 0 2rem 2.5rem 2rem;
+}
 .season-selector-bar {
     display: flex;
     justify-content: space-between;
@@ -112,6 +140,8 @@ button{font:inherit;color:inherit;cursor:pointer}
     margin-bottom: 1rem;
     flex-wrap: wrap;
     gap: 10px;
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
 }
 .season-select {
     background: #1e1936;
@@ -124,7 +154,8 @@ button{font:inherit;color:inherit;cursor:pointer}
     outline: none;
 }
 .season-select option { background: #12101e; color: #fff; }
-.episodes-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+
+.episodes-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
 .ep-btn {
     background: #1e1936; color: #fff;
     border: 1px solid var(--line);
@@ -134,6 +165,9 @@ button{font:inherit;color:inherit;cursor:pointer}
     display: flex; align-items: center; justify-content: space-between;
 }
 .ep-btn:hover, .ep-btn.active { background: var(--volt); border-color: var(--sky); }
+
+.video-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+.video-container video { width: 100%; height: 100%; border: none; }
 .placeholder-box {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     height: 100%; background: radial-gradient(circle, #1a1633 0%, #07060b 100%);
@@ -161,32 +195,44 @@ button{font:inherit;color:inherit;cursor:pointer}
 <main class="catalog" id="catalogo">
   <div class="head">
     <h1>Catálogo de Animes</h1>
-    <p>Haz clic en una serie para elegir temporada y capítulo.</p>
+    <p>Haz clic en cualquier serie para ver su sinopsis completa y elegir capítulos.</p>
   </div>
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Modal de Reproducción -->
+<!-- Modal Estilo Netflix -->
 <div class="modal" id="playerModal">
     <div class="modal-content">
         <span class="close-btn" onclick="closePlayer()">×</span>
-        <div class="video-container" id="videoContainer"></div>
-        <div class="modal-body">
+        
+        <!-- Cabecera con Portada Grande y Sinopsis -->
+        <div class="anime-detail-header" id="animeHeader"></div>
+
+        <!-- Selector de Temporadas y Lista de Episodios -->
+        <div class="episodes-section-box">
             <div class="season-selector-bar">
-                <h3 id="modalTitle" style="margin:0; color:var(--sky);">Temporadas y Episodios</h3>
+                <h3 style="margin:0; color:var(--sky);">Episodios</h3>
                 <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)">
-                    <!-- Las temporadas se cargan aquí -->
+                    <!-- Se cargan dinámicamente -->
                 </select>
             </div>
             <div class="episodes-list" id="episodesList">
-                <!-- Los episodios se cargan aquí -->
+                <!-- Se cargan dinámicamente -->
+            </div>
+
+            <!-- Reproductor de Video (Inicialmente vacío / en espera) -->
+            <div class="video-container" id="videoContainer">
+                <div class="placeholder-box">
+                    <i class="fas fa-film" style="font-size:3rem; color:var(--volt); margin-bottom:10px;"></i>
+                    <p style="color:var(--muted); margin:0;">Selecciona un capítulo arriba para comenzar la reproducción.</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-/* ============ BASE DE DATOS CON PORTADAS REALES Y OFICIALES ============ */
+/* ============ BASE DE DATOS CON MÁS ANIMES EN EL CARRUSEL (f: 1) ============ */
 const ANIME = [
   {
     id: "naruto",
@@ -194,9 +240,9 @@ const ANIME = [
     g: "Shonen / Acción",
     y: 2002,
     r: "9.0",
-    d: "Un joven ninja marginado busca el reconocimiento de su aldea y sueña con convertirse en Hokage.",
+    d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca desesperadamente el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas, batallas intensas y descubriendo los oscuros secretos de su propio pasado y del mundo shinobi.",
     img: "https://m.media-amazon.com/images/I/81x2859uKdL._AC_UF894,1000_QL80_.jpg",
-    f: 1,
+    f: 1, // <--- Destacado en el carrusel superior
     seasons: [
       {
         name: "Temporada 1",
@@ -220,9 +266,9 @@ const ANIME = [
     g: "Acción / Fantasía",
     y: 2019,
     r: "9.0",
-    d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia y curar a su hermana.",
+    d: "Tanjiro Kamado ve su vida destrozada cuando un demonio masacra a su familia y convierte a su hermana Nezuko en una criatura sedienta de sangre. Decidido a vengarlos y encontrar una cura, se une al Cuerpo de Cazadores de Demonios.",
     img: "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_FMjpg_UX1000_.jpg",
-    f: 1,
+    f: 1, // <--- Destacado en el carrusel superior
     seasons: [
       {
         name: "Temporada 1 (Kimetsu no Yaiba)",
@@ -238,9 +284,9 @@ const ANIME = [
     g: "Sobrenatural",
     y: 2020,
     r: "8.8",
-    d: "Un estudiante de preparatoria se traga un objeto maldito y se une a una organización secreta de hechiceros.",
+    d: "Yuji Itadori es un estudiante común con una fuerza física descomunal que se ve envuelto en el mundo oculto de las maldiciones tras ingerir el dedo podrido de Sukuna, el Rey de las Maldiciones, contrayendo un pacto mortal.",
     img: "https://m.media-amazon.com/images/M/MV5BNGY4MTg3NzgtOWFkZi00YzVmLThmZjAtYzNmYjBmMDc0MWFjXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg",
-    f: 1,
+    f: 1, // <--- Destacado en el carrusel superior
     seasons: [
       {
         name: "Temporada 1",
@@ -256,9 +302,9 @@ const ANIME = [
     g: "Aventura",
     y: 1999,
     r: "9.1",
-    d: "Monkey D. Luffy zarpa con su tripulación pirata para encontrar el legendario tesoro One Piece.",
+    d: "Acompaña a Monkey D. Luffy y a su colorida tripulación de piratas en una gran travesía a través del Grand Line en busca del legendario tesoro dejado por el difunto Rey de los Piratas, Gol D. Roger: el One Piece.",
     img: "https://m.media-amazon.com/images/M/MV5BODcwNWE3OTMtMDc3MS00NDFjLWE1OTAtNDAxNzYyOWIwMmUwXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_FMjpg_UX1000_.jpg",
-    f: 0,
+    f: 1, // <--- Destacado en el carrusel superior
     seasons: [
       {
         name: "East Blue (Temporada 1)",
@@ -274,7 +320,7 @@ const ANIME = [
     g: "Drama / Acción",
     y: 2013,
     r: "9.1",
-    d: "La humanidad vive protegida por enormes murallas para defenderse de mortales titanes devoradores de hombres.",
+    d: "Para escapar de la extinción a manos de gigantescos humanoides devoradores llamados Titanes, la humanidad sobrevive confinada detrás de tres enormes murallas concéntricas, hasta que un día una brecha lo cambia todo.",
     img: "https://m.media-amazon.com/images/M/MV5BNDFjYTIxMjctYTQwZC00ZDliLThjZDktODJlNTQ3ZGJjN2RjXkEyXkFqcGdeQXVyNTI4MzE4MDU@._V1_FMjpg_UX1000_.jpg",
     f: 0,
     seasons: [
@@ -292,7 +338,7 @@ const ANIME = [
     g: "Acción",
     y: 2024,
     r: "8.5",
-    d: "En un mundo lleno de portales y monstruos, el cazador más débil recibe un sistema secreto para subir de nivel.",
+    d: "En un mundo donde portales conectan la realidad con mazmorras llenas de monstruos, Sung Jinwoo, conocido como el cazador más débil de la humanidad, recibe una extraña misión que le otorga el poder único de subir de nivel.",
     img: "https://m.media-amazon.com/images/M/MV5BNGE2NmQ4ZjgtNTM5ZS00NWVjLWIyMGItMTBjN2NlZTRhMmQ1XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_FMjpg_UX1000_.jpg",
     f: 0,
     seasons: [
@@ -309,9 +355,8 @@ const ANIME = [
 const $ = (s) => document.querySelector(s);
 const byId = (id) => ANIME.find((x) => x.id === id);
 let currentAnime = null;
-let activeEpIndex = -1;
 
-/* ---------- Carrusel Superior Automático ---------- */
+/* ---------- Carrusel Superior Automático (Muestra todos los marcados con f: 1) ---------- */
 const feat = ANIME.filter((x) => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
   <section class="slide${i ? "" : " on"}" style="background-image: url('${x.img}')" aria-label="${x.t}">
@@ -320,7 +365,7 @@ $("#slides").innerHTML = feat.map((x, i) => `
       <h2>${x.t}</h2>
       <p>${x.d}</p>
       <div class="btns">
-        <button class="btn main" onclick="openPlayer('${x.id}')"><i class="fas fa-list"></i> Ver Episodios</button>
+        <button class="btn main" onclick="openPlayer('${x.id}')"><i class="fas fa-info-circle"></i> Ver Sinopsis y Episodios</button>
       </div>
     </div>
   </section>`).join("");
@@ -344,7 +389,7 @@ $("#next").onclick = () => { go(cur + 1); play(); };
 dots.forEach((d, i) => (d.onclick = () => { go(i); play(); }));
 play();
 
-/* ---------- Renderizar Tarjetas con Portadas Oficiales ---------- */
+/* ---------- Renderizar Tarjetas del Catálogo ---------- */
 $("#grid").innerHTML = ANIME.map((x) => `
   <div class="card" onclick="openPlayer('${x.id}')" style="background-image:url('${x.img}')">
     <div class="art"></div>
@@ -355,18 +400,33 @@ $("#grid").innerHTML = ANIME.map((x) => `
     </div>
   </div>`).join("");
 
-/* ---------- Lógica del Modal y Selección de Episodios ---------- */
+/* ---------- Lógica del Modal Estilo Netflix ---------- */
 function openPlayer(id) {
     currentAnime = byId(id);
     const modal = document.getElementById('playerModal');
+    const header = document.getElementById('animeHeader');
     const select = document.getElementById('seasonSelect');
-    
-    document.getElementById('modalTitle').textContent = currentAnime.t;
 
-    // Colocar el aviso inicial en el contenedor sin reproducir automáticamente
-    showPlaceholder();
+    // 1. Cargar la portada grande y la sinopsis al lado
+    header.innerHTML = `
+        <div class="anime-poster-large" style="background-image: url('${currentAnime.img}')"></div>
+        <div class="anime-info-text">
+            <h2>${currentAnime.t}</h2>
+            <div class="meta-tags">
+                <span>★ ${currentAnime.r}</span>
+                <span>•</span>
+                <span>${currentAnime.g}</span>
+                <span>•</span>
+                <span>${currentAnime.y}</span>
+            </div>
+            <p>${currentAnime.d}</p>
+        </div>
+    `;
 
-    // Llenar selector de temporadas
+    // 2. Resetear el reproductor a la caja de espera (no arranca solo)
+    resetVideoPlaceholder();
+
+    // 3. Llenar las temporadas en el selector desplegable
     select.innerHTML = currentAnime.seasons.map((season, index) => `
         <option value="${index}">${season.name}</option>
     `).join("");
@@ -375,12 +435,11 @@ function openPlayer(id) {
     modal.style.display = 'flex';
 }
 
-function showPlaceholder() {
+function resetVideoPlaceholder() {
     document.getElementById('videoContainer').innerHTML = `
         <div class="placeholder-box">
-            <i class="fas fa-play-circle" style="font-size:3.5rem; color:var(--volt); margin-bottom:12px;"></i>
-            <h3 style="margin:0 0 6px 0;">${currentAnime.t}</h3>
-            <p style="color:var(--muted); margin:0;">Selecciona un episodio de la lista inferior para empezar a reproducir.</p>
+            <i class="fas fa-film" style="font-size:3rem; color:var(--volt); margin-bottom:10px;"></i>
+            <p style="color:var(--muted); margin:0;">Selecciona un capítulo arriba para comenzar la reproducción.</p>
         </div>
     `;
 }
@@ -388,12 +447,11 @@ function showPlaceholder() {
 function changeSeason(seasonIndex) {
     const season = currentAnime.seasons[seasonIndex];
     const epList = document.getElementById('episodesList');
-    activeEpIndex = -1;
 
     epList.innerHTML = season.episodes.map((ep, index) => `
         <button class="ep-btn" id="ep-btn-${index}" onclick="playEpisode('${ep.videoUrl}', '${ep.title}', ${index})">
-            <span><i class="fas fa-film" style="color:var(--sky); margin-right:10px;"></i> ${ep.title}</span>
-            <i class="fas fa-play" style="font-size:0.8rem; opacity:0.7;"></i>
+            <span><i class="fas fa-play-circle" style="color:var(--sky); margin-right:10px;"></i> ${ep.title}</span>
+            <span style="font-size:0.8rem; opacity:0.8;">Ver ahora</span>
         </button>
     `).join("");
 }
@@ -401,19 +459,20 @@ function changeSeason(seasonIndex) {
 function playEpisode(url, title, index) {
     const container = document.getElementById('videoContainer');
     
-    // Marcar botón activo
+    // Marcar botón activo visualmente
     document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
     const currentBtn = document.getElementById(`ep-btn-${index}`);
     if(currentBtn) currentBtn.classList.add('active');
 
     if(url) {
+        // Aquí recién arranca el video porque el usuario lo seleccionó
         container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4">Tu navegador no soporta el video.</video>`;
     } else {
         container.innerHTML = `
             <div class="placeholder-box">
-                <i class="fas fa-clock" style="font-size:3rem; color:var(--sky); margin-bottom:12px;"></i>
-                <h3 style="margin:0 0 6px 0;">${title}</h3>
-                <p style="color:var(--muted); margin:0;">Este capítulo aún no está subido a los servidores de LATAnimex.</p>
+                <i class="fas fa-clock" style="font-size:3rem; color:var(--sky); margin-bottom:10px;"></i>
+                <h3 style="margin:0 0 6px 0; color:#fff;">${title}</h3>
+                <p style="color:var(--muted); margin:0;">Próximamente disponible en los servidores.</p>
             </div>
         `;
     }
