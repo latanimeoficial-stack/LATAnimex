@@ -33,7 +33,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   display:flex;align-items:center;padding:0 clamp(18px,6vw,96px);background-size:cover;background-position:center}
 .slide.on{opacity:1;visibility:visible}
 .slide::before{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.85) 75%, var(--ink) 100%), linear-gradient(90deg,rgba(7,6,11,0.9) 0%,rgba(7,6,11,0.2) 70%)}
+  background:linear-gradient(180deg, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.85) 75%, var(--ink) 100%), linear-gradient(90deg,rgba(7,6,11,0.95) 0%,rgba(7,6,11,0.3) 70%)}
 .copy{position:relative;z-index:2;max-width:640px;margin-top:34px}
 .copy h2{margin:0 0 10px;font-size:clamp(2.2rem,6vw,4.8rem);line-height:.95;font-weight:900;font-style:italic;letter-spacing:-.035em;
   text-shadow:0 4px 24px rgba(0,0,0,.6)}
@@ -64,20 +64,20 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card{position:relative;aspect-ratio:2/3;border:0;padding:0;text-align:left;border-radius:12px;overflow:hidden;
   background-color:var(--deep);background-size:cover;background-position:center;
   box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .2s;cursor:pointer}
-.card .art{position:absolute;inset:0;background:linear-gradient(165deg, rgba(157,78,221,0.1), rgba(7,6,11,0.85))}
+.card .art{position:absolute;inset:0;background:linear-gradient(165deg, transparent 40%, rgba(7,6,11,0.95))}
 .card .info{position:absolute;inset:auto 0 0 0;padding:25px 12px 12px;background:linear-gradient(transparent,rgba(7,6,11,.95))}
 .card strong{display:block;font-size:1rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card small{color:var(--muted)}
 .card .star{position:absolute;top:10px;left:10px;padding:2px 9px;border-radius:99px;background:rgba(7,6,11,.8);font-size:.78rem;font-weight:700;z-index:2}
 .card:hover{transform:translateY(-4px);border:1px solid var(--volt)}
 
-/* ---------- Modal / Ventana Flotante del Reproductor ---------- */
+/* ---------- Modal / Ventana Flotante ---------- */
 .modal {
     display: none;
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(4, 3, 7, 0.92);
+    background: rgba(4, 3, 7, 0.94);
     z-index: 100;
     justify-content: center;
     align-items: center;
@@ -98,9 +98,10 @@ button{font:inherit;color:inherit;cursor:pointer}
     top: 15px; right: 20px;
     font-size: 2rem; color: #fff;
     cursor: pointer; z-index: 10;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
 }
 .close-btn:hover { color: var(--sky); }
-.video-container { width: 100%; aspect-ratio: 16/9; background: #000; }
+.video-container { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
 .video-container video { width: 100%; height: 100%; border: none; }
 
 .modal-body { padding: 1.5rem; }
@@ -123,15 +124,21 @@ button{font:inherit;color:inherit;cursor:pointer}
     outline: none;
 }
 .season-select option { background: #12101e; color: #fff; }
-.episodes-list { max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.episodes-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
 .ep-btn {
     background: #1e1936; color: #fff;
     border: 1px solid var(--line);
-    padding: 10px 14px;
+    padding: 12px 16px;
     border-radius: 8px; cursor: pointer;
     font-weight: 600; text-align: left; transition: 0.2s;
+    display: flex; align-items: center; justify-content: space-between;
 }
 .ep-btn:hover, .ep-btn.active { background: var(--volt); border-color: var(--sky); }
+.placeholder-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; background: radial-gradient(circle, #1a1633 0%, #07060b 100%);
+    color: #fff; text-align: center; padding: 20px;
+}
 </style>
 </head>
 <body>
@@ -154,12 +161,12 @@ button{font:inherit;color:inherit;cursor:pointer}
 <main class="catalog" id="catalogo">
   <div class="head">
     <h1>Catálogo de Animes</h1>
-    <p>Elige una serie para ver sus temporadas y episodios oficiales.</p>
+    <p>Haz clic en una serie para elegir temporada y capítulo.</p>
   </div>
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Modal de Reproducción con selector de temporadas -->
+<!-- Modal de Reproducción -->
 <div class="modal" id="playerModal">
     <div class="modal-content">
         <span class="close-btn" onclick="closePlayer()">×</span>
@@ -168,11 +175,11 @@ button{font:inherit;color:inherit;cursor:pointer}
             <div class="season-selector-bar">
                 <h3 id="modalTitle" style="margin:0; color:var(--sky);">Temporadas y Episodios</h3>
                 <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)">
-                    <!-- Las temporadas se llenan dinámicamente -->
+                    <!-- Las temporadas se cargan aquí -->
                 </select>
             </div>
             <div class="episodes-list" id="episodesList">
-                <!-- Los episodios se llenan dinámicamente -->
+                <!-- Los episodios se cargan aquí -->
             </div>
         </div>
     </div>
@@ -188,7 +195,7 @@ const ANIME = [
     y: 2002,
     r: "9.0",
     d: "Un joven ninja marginado busca el reconocimiento de su aldea y sueña con convertirse en Hokage.",
-    img: "https://m.media-amazon.com/images/M/MV5BZmQ5NGFiNWEtMmMyMC00MDdiLTg5YjktOGY5ZDc2MDU0YjIwXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg",
+    img: "https://m.media-amazon.com/images/I/81x2859uKdL._AC_UF894,1000_QL80_.jpg",
     f: 1,
     seasons: [
       {
@@ -202,7 +209,7 @@ const ANIME = [
       {
         name: "Temporada 2",
         episodes: [
-          { title: "Episodio 1: ¡Próximamente temporada 2!", videoUrl: "" }
+          { title: "Episodio 1: ¡Próximamente más episodios!", videoUrl: "" }
         ]
       }
     ]
@@ -231,7 +238,7 @@ const ANIME = [
     g: "Sobrenatural",
     y: 2020,
     r: "8.8",
-    d: "Un estudiante de preparatoria se traga un dedo maldito y se une a una organización secreta.",
+    d: "Un estudiante de preparatoria se traga un objeto maldito y se une a una organización secreta de hechiceros.",
     img: "https://m.media-amazon.com/images/M/MV5BNGY4MTg3NzgtOWFkZi00YzVmLThmZjAtYzNmYjBmMDc0MWFjXkEyXkFqcGdeQXVyNjAwNDUxODI@._V1_FMjpg_UX1000_.jpg",
     f: 1,
     seasons: [
@@ -285,14 +292,14 @@ const ANIME = [
     g: "Acción",
     y: 2024,
     r: "8.5",
-    d: "En un mundo lleno de portales y monstruos, el cazador más débil recibe un sistema secreto que lo hace evolucionar.",
+    d: "En un mundo lleno de portales y monstruos, el cazador más débil recibe un sistema secreto para subir de nivel.",
     img: "https://m.media-amazon.com/images/M/MV5BNGE2NmQ4ZjgtNTM5ZS00NWVjLWIyMGItMTBjN2NlZTRhMmQ1XkEyXkFqcGdeQXVyMTUzMTg2ODkz._V1_FMjpg_UX1000_.jpg",
     f: 0,
     seasons: [
       {
         name: "Temporada 1",
         episodes: [
-          { title: "Episodio 1: I'm Used to It", videoUrl: "" }
+          { title: "Episodio 1: Me he acostumbrado", videoUrl: "" }
         ]
       }
     ]
@@ -302,6 +309,7 @@ const ANIME = [
 const $ = (s) => document.querySelector(s);
 const byId = (id) => ANIME.find((x) => x.id === id);
 let currentAnime = null;
+let activeEpIndex = -1;
 
 /* ---------- Carrusel Superior Automático ---------- */
 const feat = ANIME.filter((x) => x.f);
@@ -312,7 +320,7 @@ $("#slides").innerHTML = feat.map((x, i) => `
       <h2>${x.t}</h2>
       <p>${x.d}</p>
       <div class="btns">
-        <button class="btn main" onclick="openPlayer('${x.id}')"><i class="fas fa-play"></i> Ver Episodios</button>
+        <button class="btn main" onclick="openPlayer('${x.id}')"><i class="fas fa-list"></i> Ver Episodios</button>
       </div>
     </div>
   </section>`).join("");
@@ -347,7 +355,7 @@ $("#grid").innerHTML = ANIME.map((x) => `
     </div>
   </div>`).join("");
 
-/* ---------- Lógica del Modal y Temporadas ---------- */
+/* ---------- Lógica del Modal y Selección de Episodios ---------- */
 function openPlayer(id) {
     currentAnime = byId(id);
     const modal = document.getElementById('playerModal');
@@ -355,40 +363,59 @@ function openPlayer(id) {
     
     document.getElementById('modalTitle').textContent = currentAnime.t;
 
-    // Llenar el selector desplegable con las temporadas reales
+    // Colocar el aviso inicial en el contenedor sin reproducir automáticamente
+    showPlaceholder();
+
+    // Llenar selector de temporadas
     select.innerHTML = currentAnime.seasons.map((season, index) => `
         <option value="${index}">${season.name}</option>
     `).join("");
 
-    // Cargar la temporada 1 por defecto
     changeSeason(0);
     modal.style.display = 'flex';
+}
+
+function showPlaceholder() {
+    document.getElementById('videoContainer').innerHTML = `
+        <div class="placeholder-box">
+            <i class="fas fa-play-circle" style="font-size:3.5rem; color:var(--volt); margin-bottom:12px;"></i>
+            <h3 style="margin:0 0 6px 0;">${currentAnime.t}</h3>
+            <p style="color:var(--muted); margin:0;">Selecciona un episodio de la lista inferior para empezar a reproducir.</p>
+        </div>
+    `;
 }
 
 function changeSeason(seasonIndex) {
     const season = currentAnime.seasons[seasonIndex];
     const epList = document.getElementById('episodesList');
+    activeEpIndex = -1;
 
-    epList.innerHTML = season.episodes.map((ep) => `
-        <button class="ep-btn" onclick="playEpisode('${ep.videoUrl}', '${ep.title}')">
-            <i class="fas fa-play-circle" style="color:var(--sky); margin-right:8px;"></i> ${ep.title}
+    epList.innerHTML = season.episodes.map((ep, index) => `
+        <button class="ep-btn" id="ep-btn-${index}" onclick="playEpisode('${ep.videoUrl}', '${ep.title}', ${index})">
+            <span><i class="fas fa-film" style="color:var(--sky); margin-right:10px;"></i> ${ep.title}</span>
+            <i class="fas fa-play" style="font-size:0.8rem; opacity:0.7;"></i>
         </button>
     `).join("");
-
-    // Reproducir el primer episodio automáticamente si tiene enlace
-    if(season.episodes[0].videoUrl) {
-        playEpisode(season.episodes[0].videoUrl, season.episodes[0].title);
-    } else {
-        document.getElementById('videoContainer').innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;background:#000;"><h3>Episodio próximamente disponible</h3></div>`;
-    }
 }
 
-function playEpisode(url, title) {
+function playEpisode(url, title, index) {
     const container = document.getElementById('videoContainer');
+    
+    // Marcar botón activo
+    document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+    const currentBtn = document.getElementById(`ep-btn-${index}`);
+    if(currentBtn) currentBtn.classList.add('active');
+
     if(url) {
         container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4">Tu navegador no soporta el video.</video>`;
     } else {
-        container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;background:#000;"><h3>${title} - Próximamente</h3></div>`;
+        container.innerHTML = `
+            <div class="placeholder-box">
+                <i class="fas fa-clock" style="font-size:3rem; color:var(--sky); margin-bottom:12px;"></i>
+                <h3 style="margin:0 0 6px 0;">${title}</h3>
+                <p style="color:var(--muted); margin:0;">Este capítulo aún no está subido a los servidores de LATAnimex.</p>
+            </div>
+        `;
     }
 }
 
