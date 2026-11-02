@@ -8,189 +8,100 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
 :root{
-  --ink:#07060b; --deep:#12101e; --sea:#0d2f7a; --volt:#9d4edd; --sky:#00b4d8; --ice:#eaf3ff;
-  --text:#ffffff; --muted:#94a3b8; --line:rgba(157, 78, 221, 0.25);
+  --ink:#050508; --deep:#100d1a; --volt:#9d4edd; --sky:#00b4d8; --text:#ffffff; --muted:#94a3b8;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--ink);color:var(--text);
-  font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+  font-family:"Segoe UI",system-ui,-apple-system,sans-serif;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 
-/* ---------- Carrusel Superior (Hero) ---------- */
-.hero{position:relative;height:clamp(380px,54vh,580px);overflow:hidden;
-  clip-path:polygon(0 0,100% 0,100% 90%,0 100%);background:var(--deep)}
+/* ---------- Carrusel Superior ---------- */
+.hero{position:relative;height:clamp(360px,50vh,520px);overflow:hidden;background:var(--deep)}
 .nav{position:absolute;z-index:5;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;
-  padding:18px clamp(18px,4vw,56px);background:rgba(7,6,11,0.6);backdrop-filter:blur(8px)}
-.logo{font-weight:900;font-style:italic;font-size:1.7rem;letter-spacing:-.04em;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
-.logo b{color:var(--volt);font-style:normal}
-.mylist{background:rgba(18,16,30,.8);border:1px solid var(--line);border-radius:999px;padding:8px 16px;
-  backdrop-filter:blur(6px);font-weight:600;text-decoration:none;color:var(--text)}
+  padding:18px clamp(18px,4vw,56px);background:rgba(5,5,8,0.7);backdrop-filter:blur(8px)}
+.logo{font-weight:900;font-style:italic;font-size:1.7rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
+.logo b{color:var(--volt)}
+.mylist{background:rgba(16,13,26,.9);border:1px solid rgba(157,78,221,0.3);border-radius:999px;padding:8px 16px;font-weight:600;text-decoration:none;color:var(--text)}
 
-.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .9s ease,visibility .9s;
-  display:flex;align-items:center;padding:0 clamp(18px,6vw,96px);background-size:cover;background-position:center}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s ease;
+  display:flex;align-items:center;padding:0 clamp(18px,6vw,96px)}
 .slide.on{opacity:1;visibility:visible}
-.slide::before{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg, rgba(7,6,11,0.2) 0%, rgba(7,6,11,0.85) 75%, var(--ink) 100%), linear-gradient(90deg,rgba(7,6,11,0.95) 0%,rgba(7,6,11,0.3) 70%)}
-.copy{position:relative;z-index:2;max-width:640px;margin-top:34px}
-.copy h2{margin:0 0 10px;font-size:clamp(2.2rem,6vw,4.8rem);line-height:.95;font-weight:900;font-style:italic;letter-spacing:-.035em;
-  text-shadow:0 4px 24px rgba(0,0,0,.6)}
+.slide::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,8,0.95) 20%,rgba(5,5,8,0.4) 80%)}
+.copy{position:relative;z-index:2;max-width:600px}
+.copy h2{margin:0 0 10px;font-size:clamp(2.2rem,5vw,4rem);font-weight:900;font-style:italic;text-shadow:0 4px 20px rgba(0,0,0,.8)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;padding:0;list-style:none}
-.chips li{padding:3px 11px;border-radius:999px;background:rgba(234,243,255,.14);font-size:.85rem;font-weight:600}
+.chips li{padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.15);font-size:.85rem;font-weight:600}
 .chips .rate{background:var(--volt)}
-.copy p{margin:0 0 18px;max-width:46ch;color:#d6e4ff;text-shadow:1px 1px 3px rgba(0,0,0,0.8)}
-.btns{display:flex;flex-wrap:wrap;gap:10px}
-.btn{display:inline-block;border:0;border-radius:10px;padding:11px 22px;font-weight:800;text-decoration:none;cursor:pointer}
-.btn.main{background:linear-gradient(135deg, var(--volt), var(--sky));color:#fff;box-shadow:0 8px 26px rgba(157,78,221,.45)}
-.btn.main:hover{opacity:0.9}
+.copy p{margin:0 0 18px;color:#d6e4ff}
+.btn{border:0;border-radius:10px;padding:12px 24px;font-weight:800;background:linear-gradient(135deg, var(--volt), var(--sky));color:#fff;cursor:pointer;box-shadow:0 5px 20px rgba(157,78,221,0.4)}
 
-.ctrl{position:absolute;z-index:5;left:clamp(18px,6vw,96px);right:clamp(18px,4vw,56px);bottom:11%;
-  display:flex;justify-content:space-between;align-items:center}
+.ctrl{position:absolute;z-index:5;left:clamp(18px,6vw,96px);right:clamp(18px,4vw,56px);bottom:8%}
 .dots{display:flex;gap:8px}
-.dots button{width:12px;height:12px;border-radius:99px;border:0;padding:0;background:rgba(234,243,255,.35);transition:width .3s,background .3s}
-.dots button[aria-current="true"]{width:34px;background:var(--sky)}
-.arrows{display:flex;gap:8px}
-.arrows button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(5,13,36,.7);font-size:1.2rem;cursor:pointer}
-.arrows button:hover{background:var(--volt)}
+.dots button{width:12px;height:12px;border-radius:99px;border:0;background:rgba(255,255,255,.3);transition:all .3s}
+.dots button[aria-current="true"]{width:32px;background:var(--sky)}
 
-/* ---------- Catálogo Inferior (Grid) ---------- */
-.catalog{padding:3rem clamp(18px,4vw,56px) 100px;flex:1;}
-.head{margin:0 0 18px}
-.head h1{margin:0;font-size:clamp(1.5rem,3vw,2.1rem);font-style:italic;font-weight:900;letter-spacing:-.03em}
-.head p{margin:0;color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:18px}
-.card{position:relative;aspect-ratio:2/3;border:0;padding:0;text-align:left;border-radius:12px;overflow:hidden;
-  box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .2s;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:15px;}
-.card .title-badge { font-size: 1.3rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -0.02em; text-shadow: 0 4px 12px rgba(0,0,0,0.6); margin-top: auto; }
-.card .art{position:absolute;inset:0;background:linear-gradient(165deg, transparent 40%, rgba(7,6,11,0.95))}
-.card .info{position:relative;z-index:2;padding-top:10px;}
-.card strong{display:block;font-size:1.1rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card small{color:rgba(255,255,255,0.8)}
-.card .star{position:absolute;top:10px;left:10px;padding:2px 9px;border-radius:99px;background:rgba(7,6,11,.8);font-size:.78rem;font-weight:700;z-index:2}
-.card:hover{transform:translateY(-4px);box-shadow: 0 0 25px rgba(157, 78, 221, 0.6);}
+/* ---------- Catálogo Grid con Portadas Temáticas ---------- */
+.catalog{padding:3rem clamp(18px,4vw,56px) 100px;flex:1}
+.head h1{margin:0 0 5px;font-size:2rem;font-style:italic;font-weight:900}
+.head p{margin:0 0 20px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:20px}
+
+.card{
+  position:relative;aspect-ratio:2/3;border:0;padding:16px;text-align:center;border-radius:14px;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.5);transition:transform .2s,box-shadow .2s;cursor:pointer;
+  border:1px solid rgba(255,255,255,0.1);
+}
+.card:hover{transform:translateY(-6px);box-shadow:0 0 30px rgba(157,78,221,0.6)}
+.card .star{position:absolute;top:10px;left:10px;padding:2px 8px;border-radius:99px;background:rgba(0,0,0,0.7);font-size:.75rem;font-weight:700}
+.card .card-title{font-size:1.4rem;font-weight:900;font-style:italic;text-transform:uppercase;margin:auto 0;text-shadow:0 3px 10px rgba(0,0,0,0.8)}
+.card .card-info{background:rgba(0,0,0,0.6);width:100%;padding:8px;border-radius:8px;backdrop-filter:blur(4px)}
+.card .card-info strong{display:block;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .card-info small{color:var(--muted);font-size:0.8rem}
 
 /* ---------- Modal Estilo Netflix ---------- */
 .modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(4, 3, 7, 0.96);
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-    padding: 1.5rem;
-    backdrop-filter: blur(10px);
+    display: none; position: fixed; inset: 0; background: rgba(3,2,6,0.95);
+    z-index: 100; justify-content: center; align-items: center; padding: 1.5rem; backdrop-filter: blur(10px);
 }
 .modal-content {
-    background: var(--deep);
-    width: 100%; max-width: 950px;
-    max-height: 90vh;
-    border-radius: 16px;
-    overflow-y: auto;
-    position: relative;
-    border: 1px solid var(--volt);
+    background: var(--deep); width: 100%; max-width: 900px; max-height: 90vh;
+    border-radius: 16px; overflow-y: auto; position: relative; border: 1px solid var(--volt);
     box-shadow: 0 0 50px rgba(157, 78, 221, 0.4);
 }
-.close-btn {
-    position: absolute;
-    top: 15px; right: 20px;
-    font-size: 2rem; color: #fff;
-    cursor: pointer; z-index: 20;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
-}
+.close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer; z-index: 20; }
 .close-btn:hover { color: var(--sky); }
 
-/* Distribución Izquierda (Portada Temática) y Derecha (Sinopsis) */
-.anime-detail-header {
-    display: flex;
-    gap: 28px;
-    padding: 2.5rem 2rem 2rem 2rem;
-    background: linear-gradient(180deg, rgba(157, 78, 221, 0.15), transparent);
-    flex-wrap: wrap;
-    align-items: flex-start;
-}
+.anime-detail-header { display: flex; gap: 24px; padding: 2.5rem 2rem 2rem 2rem; flex-wrap: wrap; align-items: center; }
 .anime-poster-custom {
-    width: 200px;
-    aspect-ratio: 2/3;
-    border-radius: 12px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.7);
-    border: 2px solid rgba(255,255,255,0.2);
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    text-align: center;
+    width: 190px; aspect-ratio: 2/3; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2);
+    display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 15px; text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.7); flex-shrink: 0;
 }
-.anime-poster-custom h1 {
-    font-size: 1.6rem;
-    font-weight: 900;
-    font-style: italic;
-    margin: 0;
-    text-transform: uppercase;
-    text-shadow: 0 4px 15px rgba(0,0,0,0.8);
-}
-.anime-info-text {
-    flex: 1;
-    min-width: 260px;
-}
-.anime-info-text h2 { margin: 0 0 10px 0; font-size: 2.4rem; color: #fff; font-style: italic; }
-.anime-info-text .meta-tags { display: flex; gap: 10px; margin-bottom: 14px; font-size: 0.95rem; color: var(--sky); font-weight: 700; }
-.anime-info-text p { color: #d6e4ff; line-height: 1.65; margin: 0; font-size: 1.05rem; }
+.anime-poster-custom h2 { font-size: 1.5rem; font-weight: 900; font-style: italic; margin: 10px 0 0 0; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+.anime-info-text { flex: 1; min-width: 250px; }
+.anime-info-text h3 { margin: 0 0 8px 0; font-size: 2.2rem; font-style: italic; }
+.anime-info-text .meta { display: flex; gap: 10px; color: var(--sky); font-weight: 700; margin-bottom: 12px; font-size: 0.9rem; }
+.anime-info-text p { color: #d6e4ff; margin: 0; line-height: 1.6; }
 
-/* Sección de episodios y reproductor */
-.episodes-section-box {
-    padding: 0 2rem 2.5rem 2rem;
-}
-.season-selector-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-    gap: 10px;
-    border-top: 1px solid var(--line);
-    padding-top: 1.5rem;
-}
-.season-select {
-    background: #1e1936;
-    color: #fff;
-    border: 1px solid var(--line);
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    outline: none;
-}
-.season-select option { background: #12101e; color: #fff; }
-
-.episodes-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
-.ep-btn {
-    background: #1e1936; color: #fff;
-    border: 1px solid var(--line);
-    padding: 12px 16px;
-    border-radius: 8px; cursor: pointer;
-    font-weight: 600; text-align: left; transition: 0.2s;
-    display: flex; align-items: center; justify-content: space-between;
-}
+.episodes-section { padding: 0 2rem 2.5rem 2rem; }
+.season-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; }
+.season-select { background: #1e1936; color: #fff; border: 1px solid rgba(157,78,221,0.4); padding: 8px 14px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.ep-list { max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+.ep-btn { background: #1e1936; color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: left; display: flex; justify-content: space-between; transition: 0.2s; }
 .ep-btn:hover, .ep-btn.active { background: var(--volt); border-color: var(--sky); }
 
-.video-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; margin-top: 10px; }
-.video-container video { width: 100%; height: 100%; border: none; }
-.placeholder-box {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    height: 100%; background: radial-gradient(circle, #1a1633 0%, #07060b 100%);
-    color: #fff; text-align: center; padding: 20px;
-}
+.video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; }
+.video-box video { width: 100%; height: 100%; border: none; }
+.placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: #0b0914; color: var(--muted); text-align: center; padding: 20px; }
 </style>
 </head>
 <body>
 
-<header class="hero" aria-label="Anime destacados">
+<header class="hero">
   <nav class="nav">
     <a class="logo" href="#"><i class="fas fa-play-circle" style="color:var(--volt)"></i>LAT<b>Animex</b></a>
     <a class="mylist" href="#catalogo">Catálogo</a>
@@ -198,46 +109,31 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div id="slides"></div>
   <div class="ctrl">
     <div class="dots" id="dots"></div>
-    <div class="arrows">
-      <button id="prev">‹</button>
-      <button id="next">›</button>
-    </div>
   </div>
 </header>
 
 <main class="catalog" id="catalogo">
   <div class="head">
     <h1>Catálogo de Animes</h1>
-    <p>Haz clic en cualquier serie para ver su portada temática, sinopsis y capítulos.</p>
+    <p>Haz clic en cualquier serie para ver su sinopsis y elegir capítulos.</p>
   </div>
   <div class="grid" id="grid"></div>
 </main>
 
-<!-- Modal Estilo Netflix -->
-<div class="modal" id="playerModal">
+<div class="modal" id="modal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closePlayer()">×</span>
-        
-        <!-- Cabecera: Portada temática a la izquierda / Sinopsis a la derecha -->
-        <div class="anime-detail-header" id="animeHeader"></div>
-
-        <!-- Selector de Temporadas y Lista de Episodios -->
-        <div class="episodes-section-box">
-            <div class="season-selector-bar">
-                <h3 style="margin:0; color:var(--sky);">Episodios</h3>
-                <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)">
-                    <!-- Se cargan dinámicamente -->
-                </select>
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <div class="anime-detail-header" id="modalHeader"></div>
+        <div class="episodes-section">
+            <div class="season-bar">
+                <h3 style="margin:0; color:var(--sky)">Episodios</h3>
+                <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)"></select>
             </div>
-            <div class="episodes-list" id="episodesList">
-                <!-- Se cargan dinámicamente -->
-            </div>
-
-            <!-- Reproductor de Video (Solo arranca al hacer clic en un capítulo) -->
-            <div class="video-container" id="videoContainer">
-                <div class="placeholder-box">
-                    <i class="fas fa-film" style="font-size:3rem; color:var(--volt); margin-bottom:10px;"></i>
-                    <p style="color:var(--muted); margin:0;">Selecciona un capítulo arriba para comenzar la reproducción.</p>
+            <div class="ep-list" id="epList"></div>
+            <div class="video-box" id="videoBox">
+                <div class="placeholder">
+                    <i class="fas fa-film" style="font-size:2.5rem; color:var(--volt); margin-bottom:10px;"></i>
+                    <p style="margin:0">Selecciona un capítulo de la lista superior para reproducir.</p>
                 </div>
             </div>
         </div>
@@ -245,254 +141,156 @@ button{font:inherit;color:inherit;cursor:pointer}
 </div>
 
 <script>
-/* ============ BASE DE DATOS CON FONDOS TEMÁTICOS PERSONALIZADOS ============ */
 const ANIME = [
   {
-    id: "naruto",
-    t: "Naruto",
-    g: "Shonen / Acción",
-    y: 2002,
-    r: "9.0",
-    d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca desesperadamente el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas, batallas intensas y descubriendo los oscuros secretos de su propio pasado y del mundo shinobi.",
-    bg: "linear-gradient(135deg, #ff6b00 0%, #111111 100%)", // Naranja & Negro Hokage
-    f: 1,
+    id: "naruto", t: "Naruto", g: "Shonen / Acción", y: 2002, r: "9.0",
+    d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas y batallas intensas.",
+    bg: "linear-gradient(135deg, #ff6b00 0%, #1a0800 100%)", f: true,
     seasons: [
-      {
-        name: "Temporada 1",
-        episodes: [
-          { title: "Episodio 1: ¡Entra! ¡Naruto Uzumaki!", videoUrl: "https://archive.org/download/nrt-01/NRT01.mp4" },
-          { title: "Episodio 2: ¡Mi nombre es Konohamaru!", videoUrl: "" },
-          { title: "Episodio 3: ¡Sasuke y Sakura: Amigos o enemigos!", videoUrl: "" }
-        ]
-      },
-      {
-        name: "Temporada 2",
-        episodes: [
-          { title: "Episodio 1: ¡Próximamente más episodios!", videoUrl: "" }
-        ]
-      }
+      { name: "Temporada 1", episodes: [
+        { title: "Episodio 1: ¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4" },
+        { title: "Episodio 2: ¡Mi nombre es Konohamaru!", url: "" }
+      ]}
     ]
   },
   {
-    id: "demonslayer",
-    t: "Demon Slayer",
-    g: "Acción / Fantasía",
-    y: 2019,
-    r: "9.0",
-    d: "Tanjiro Kamado ve su vida destrozada cuando un demonio masacra a su familia y convierte a su hermana Nezuko en una criatura sedienta de sangre. Decidido a vengarlos y encontrar una cura, se une al Cuerpo de Cazadores de Demonios.",
-    bg: "linear-gradient(135deg, #054f31 0%, #a80000 100%)", // Verde Tanjiro & Rojo Sangre
-    f: 1,
+    id: "demonslayer", t: "Demon Slayer", g: "Acción / Fantasía", y: 2019, r: "9.0",
+    d: "Tanjiro Kamado emprende un peligroso viaje para vengar a su familia masacrada por un demonio y curar a su hermana Nezuko.",
+    bg: "linear-gradient(135deg, #0f4c3a 0%, #3a0303 100%)", f: true,
     seasons: [
-      {
-        name: "Temporada 1 (Kimetsu no Yaiba)",
-        episodes: [
-          { title: "Episodio 1: Crueldad", videoUrl: "" }
-        ]
-      }
+      { name: "Temporada 1", episodes: [{ title: "Episodio 1: Crueldad", url: "" }] }
     ]
   },
   {
-    id: "jujutsu",
-    t: "Jujutsu Kaisen",
-    g: "Sobrenatural",
-    y: 2020,
-    r: "8.8",
-    d: "Yuji Itadori es un estudiante común con una fuerza física descomunal que se ve envuelto en el mundo oculto de las maldiciones tras ingerir el dedo podrido de Sukuna, el Rey de las Maldiciones, contrayendo un pacto mortal.",
-    bg: "linear-gradient(135deg, #4b0082 0%, #000000 100%)", // Violeta Maldición & Negro
-    f: 1,
+    id: "jujutsu", t: "Jujutsu Kaisen", g: "Sobrenatural", y: 2020, r: "8.8",
+    d: "Yuji Itadori se une a una organización secreta de hechiceros tras ingerir un objeto maldito de categoría especial.",
+    bg: "linear-gradient(135deg, #560bad 0%, #0b021a 100%)", f: true,
     seasons: [
-      {
-        name: "Temporada 1",
-        episodes: [
-          { title: "Episodio 1: Ryomen Sukuna", videoUrl: "" }
-        ]
-      }
+      { name: "Temporada 1", episodes: [{ title: "Episodio 1: Ryomen Sukuna", url: "" }] }
     ]
   },
   {
-    id: "onepiece",
-    t: "One Piece",
-    g: "Aventura",
-    y: 1999,
-    r: "9.1",
-    d: "Acompaña a Monkey D. Luffy y a su colorida tripulación de piratas en una gran travesía a través del Grand Line en busca del legendario tesoro dejado por el difunto Rey de los Piratas, Gol D. Roger: el One Piece.",
-    bg: "linear-gradient(135deg, #0077b6 0%, #023e8a 100%)", // Azul Océano & Pirata
-    f: 1,
+    id: "onepiece", t: "One Piece", g: "Aventura", y: 1999, r: "9.1",
+    d: "Monkey D. Luffy zarpa con su tripulación en busca del legendario tesoro dejado por el Rey de los Piratas.",
+    bg: "linear-gradient(135deg, #0077b6 0%, #030a1a 100%)", f: true,
     seasons: [
-      {
-        name: "East Blue (Temporada 1)",
-        episodes: [
-          { title: "Episodio 1: ¡Soy Luffy! ¡El hombre que será el Rey de los Piratas!", videoUrl: "" }
-        ]
-      }
+      { name: "East Blue", episodes: [{ title: "Episodio 1: ¡Soy Luffy!", url: "" }] }
     ]
   },
   {
-    id: "attack",
-    t: "Attack on Titan",
-    g: "Drama / Acción",
-    y: 2013,
-    r: "9.1",
-    d: "Para escapar de la extinción a manos de gigantescos humanoides devoradores llamados Titanes, la humanidad sobrevive confinada detrás de tres enormes murallas concéntricas, hasta que un día una brecha lo cambia todo.",
-    bg: "linear-gradient(135deg, #3d2b1f 0%, #1a1a1a 100%)", // Marrón Muralla & Carbón
-    f: 1,
+    id: "attack", t: "Attack on Titan", g: "Drama / Acción", y: 2013, r: "9.1",
+    d: "La humanidad sobrevive confinada tras enormes murallas para protegerse de gigantescos titanes devoradores de hombres.",
+    bg: "linear-gradient(135deg, #4a3525 0%, #111111 100%)", f: true,
     seasons: [
-      {
-        name: "Temporada 1",
-        episodes: [
-          { title: "Episodio 1: Para ti, en 2000 años", videoUrl: "" }
-        ]
-      }
+      { name: "Temporada 1", episodes: [{ title: "Episodio 1: Para ti, en 2000 años", url: "" }] }
     ]
   },
   {
-    id: "sololeveling",
-    t: "Solo Leveling",
-    g: "Acción",
-    y: 2024,
-    r: "8.5",
-    d: "En un mundo donde portales conectan la realidad con mazmorras llenas de monstruos, Sung Jinwoo, conocido como el cazador más débil de la humanidad, recibe una extraña misión que le otorga el poder único de subir de nivel.",
-    bg: "linear-gradient(135deg, #00b4d8 0%, #050515 100%)", // Azul Neón & Sombra
-    f: 1,
+    id: "sololeveling", t: "Solo Leveling", g: "Acción", y: 2024, r: "8.5",
+    d: "El cazador más débil de la humanidad recibe una extraña misión que le otorga el poder único de subir de nivel.",
+    bg: "linear-gradient(135deg, #00b4d8 0%, #030814 100%)", f: false,
     seasons: [
-      {
-        name: "Temporada 1",
-        episodes: [
-          { title: "Episodio 1: Me he acostumbrado", videoUrl: "" }
-        ]
-      }
+      { name: "Temporada 1", episodes: [{ title: "Episodio 1: Me he acostumbrado", url: "" }] }
     ]
   }
 ];
 
-const $ = (s) => document.querySelector(s);
-const byId = (id) => ANIME.find((x) => x.id === id);
+const $ = s => document.querySelector(s);
 let currentAnime = null;
 
-/* ---------- Carrusel Superior Automático ---------- */
-const feat = ANIME.filter((x) => x.f);
+// Carrusel
+const feat = ANIME.filter(x => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
-  <section class="slide${i ? "" : " on"}" style="background: ${x.bg}" aria-label="${x.t}">
+  <section class="slide${i ? "" : " on"}" style="background: ${x.bg}">
     <div class="copy">
-      <span class="chips"><li class="rate">★ ${x.r}</li><li>${x.g}</li><li>${x.y}</li></span>
+      <ul class="chips"><li class="rate">★ ${x.r}</li><li>${x.g}</li><li>${x.y}</li></ul>
       <h2>${x.t}</h2>
       <p>${x.d}</p>
-      <div class="btns">
-        <button class="btn main" onclick="openPlayer('${x.id}')"><i class="fas fa-info-circle"></i> Ver Sinopsis y Episodios</button>
-      </div>
+      <button class="btn" onclick="openModal('${x.id}')"><i class="fas fa-play"></i> Ver Episodios</button>
     </div>
   </section>`).join("");
 
-$("#dots").innerHTML = feat.map((x, i) => `<button aria-label="Ir a ${x.t}" ${i ? "" : 'aria-current="true"'}></button>`).join("");
+$("#dots").innerHTML = feat.map((_, i) => `<button ${i ? "" : 'aria-current="true"'}></button>`).join("");
 
 const slides = [...document.querySelectorAll(".slide")];
-const dots = [...document.querySelectorAll("#dots button")];
+const dots = [...document.querySelectorAll(".dots button")];
 let cur = 0, timer;
-const go = (n) => {
+const go = n => {
   cur = (n + slides.length) % slides.length;
   slides.forEach((s, i) => s.classList.toggle("on", i === cur));
   dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
 };
-const play = () => {
-  clearInterval(timer);
-  timer = setInterval(() => go(cur + 1), 6000);
-};
-$("#prev").onclick = () => { go(cur - 1); play(); };
-$("#next").onclick = () => { go(cur + 1); play(); };
-dots.forEach((d, i) => (d.onclick = () => { go(i); play(); }));
-play();
+timer = setInterval(() => go(cur + 1), 6000);
+dots.forEach((d, i) => d.onclick = () => { go(i); clearInterval(timer); });
 
-/* ---------- Renderizar Tarjetas del Catálogo con Portadas Temáticas ---------- */
-$("#grid").innerHTML = ANIME.map((x) => `
-  <div class="card" onclick="openPlayer('${x.id}')" style="background: ${x.bg}">
+// Catálogo Grid con portadas temáticas limpiecitas
+$("#grid").innerHTML = ANIME.map(x => `
+  <div class="card" onclick="openModal('${x.id}')" style="background: ${x.bg}">
     <span class="star">★ ${x.r}</span>
-    <div class="title-badge">${x.t}</div>
-    <div class="info">
+    <div class="card-title">${x.t}</div>
+    <div class="card-info">
       <strong>${x.t}</strong>
       <small>${x.g} • ${x.y}</small>
     </div>
   </div>`).join("");
 
-/* ---------- Lógica del Modal Estilo Netflix ---------- */
-function openPlayer(id) {
-    currentAnime = byId(id);
-    const modal = document.getElementById('playerModal');
-    const header = document.getElementById('animeHeader');
-    const select = document.getElementById('seasonSelect');
-
-    // Portada temática con el nombre a la izquierda / Sinopsis a la derecha
-    header.innerHTML = `
+function openModal(id) {
+    currentAnime = ANIME.find(x => x.id === id);
+    $("#modalHeader").innerHTML = `
         <div class="anime-poster-custom" style="background: ${currentAnime.bg}">
-            <i class="fas fa-tv" style="font-size:2rem; margin-bottom:10px; color:rgba(255,255,255,0.8)"></i>
-            <h1>${currentAnime.t}</h1>
+            <i class="fas fa-tv" style="font-size:2rem; opacity:0.8;"></i>
+            <h2>${currentAnime.t}</h2>
         </div>
         <div class="anime-info-text">
-            <h2>${currentAnime.t}</h2>
-            <div class="meta-tags">
-                <span>★ ${currentAnime.r}</span>
-                <span>•</span>
-                <span>${currentAnime.g}</span>
-                <span>•</span>
-                <span>${currentAnime.y}</span>
-            </div>
+            <h3>${currentAnime.t}</h3>
+            <div class="meta"><span>★ ${currentAnime.r}</span><span>•</span><span>${currentAnime.g}</span><span>•</span><span>${currentAnime.y}</span></div>
             <p>${currentAnime.d}</p>
         </div>
     `;
-
-    resetVideoPlaceholder();
-
-    select.innerHTML = currentAnime.seasons.map((season, index) => `
-        <option value="${index}">${season.name}</option>
-    `).join("");
-
+    resetVideo();
+    $("#seasonSelect").innerHTML = currentAnime.seasons.map((s, i) => `<option value="${i}">${s.name}</option>`).join("");
     changeSeason(0);
-    modal.style.display = 'flex';
+    $("#modal").style.display = "flex";
 }
 
-function resetVideoPlaceholder() {
-    document.getElementById('videoContainer').innerHTML = `
-        <div class="placeholder-box">
-            <i class="fas fa-film" style="font-size:3rem; color:var(--volt); margin-bottom:10px;"></i>
-            <p style="color:var(--muted); margin:0;">Selecciona un capítulo arriba para comenzar la reproducción.</p>
-        </div>
-    `;
+function changeSeason(idx) {
+    const s = currentAnime.seasons[idx];
+    $("#epList").innerHTML = s.episodes.map((ep, i) => `
+        <button class="ep-btn" id="ep-${i}" onclick="playEp('${ep.url}', '${ep.title}', ${i})">
+            <span><i class="fas fa-play-circle" style="color:var(--sky); margin-right:8px"></i>${ep.title}</span>
+            <span style="font-size:0.8rem; opacity:0.7">Reproducir</span>
+        </button>`).join("");
 }
 
-function changeSeason(seasonIndex) {
-    const season = currentAnime.seasons[seasonIndex];
-    const epList = document.getElementById('episodesList');
+function playEp(url, title, idx) {
+    document.querySelectorAll(".ep-btn").forEach(b => b.classList.remove("active"));
+    const btn = document.getElementById(`ep-${idx}`);
+    if(btn) btn.classList.add("active");
 
-    epList.innerHTML = season.episodes.map((ep, index) => `
-        <button class="ep-btn" id="ep-btn-${index}" onclick="playEpisode('${ep.videoUrl}', '${ep.title}', ${index})">
-            <span><i class="fas fa-play-circle" style="color:var(--sky); margin-right:10px;"></i> ${ep.title}</span>
-            <span style="font-size:0.8rem; opacity:0.8;">Ver ahora</span>
-        </button>
-    `).join("");
-}
-
-function playEpisode(url, title, index) {
-    const container = document.getElementById('videoContainer');
-    
-    document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
-    const currentBtn = document.getElementById(`ep-btn-${index}`);
-    if(currentBtn) currentBtn.classList.add('active');
-
+    const box = $("#videoBox");
     if(url) {
-        container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4">Tu navegador no soporta el video.</video>`;
+        box.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
     } else {
-        container.innerHTML = `
-            <div class="placeholder-box">
-                <i class="fas fa-clock" style="font-size:3rem; color:var(--sky); margin-bottom:10px;"></i>
-                <h3 style="margin:0 0 6px 0; color:#fff;">${title}</h3>
-                <p style="color:var(--muted); margin:0;">Próximamente disponible en los servidores.</p>
-            </div>
-        `;
+        box.innerHTML = `
+            <div class="placeholder">
+                <i class="fas fa-clock" style="font-size:2.5rem; color:var(--sky); margin-bottom:10px;"></i>
+                <h4 style="margin:0 0 5px 0; color:#fff">${title}</h4>
+                <p style="margin:0; font-size:0.9rem">Próximamente disponible en los servidores.</p>
+            </div>`;
     }
 }
 
-function closePlayer() {
-    document.getElementById('playerModal').style.display = 'none';
-    document.getElementById('videoContainer').innerHTML = '';
+function resetVideo() {
+    $("#videoBox").innerHTML = `
+        <div class="placeholder">
+            <i class="fas fa-film" style="font-size:2.5rem; color:var(--volt); margin-bottom:10px;"></i>
+            <p style="margin:0">Selecciona un capítulo de la lista superior para reproducir.</p>
+        </div>`;
+}
+
+function closeModal() {
+    $("#modal").style.display = "none";
+    $("#videoBox").innerHTML = "";
 }
 </script>
 </body>
