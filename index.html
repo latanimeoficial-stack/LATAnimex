@@ -19,7 +19,7 @@ body{margin:0;background:var(--ink);color:var(--text);
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 
-/* ---------- mitad superior: carrusel ---------- */
+/* ---------- Carrusel Superior ---------- */
 .hero{position:relative;height:clamp(380px,54vh,580px);overflow:hidden;
   clip-path:polygon(0 0,100% 0,100% 90%,0 100%);background:var(--deep);background-size:cover;background-position:center}
 .nav{position:absolute;z-index:5;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;
@@ -28,7 +28,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 .logo b{color:var(--volt);font-style:normal}
 .mylist{background:rgba(18,16,30,.8);border:1px solid var(--line);border-radius:999px;padding:8px 16px;
   backdrop-filter:blur(6px);font-weight:600;text-decoration:none;color:var(--text)}
-.mylist span{display:inline-block;min-width:1.5em;margin-left:6px;padding:0 6px;border-radius:999px;background:var(--volt);text-align:center}
 
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .9s ease,visibility .9s;
   display:flex;align-items:center;padding:0 clamp(18px,6vw,96px);background-size:cover;background-position:center}
@@ -46,19 +45,196 @@ button{font:inherit;color:inherit;cursor:pointer}
 .btn{display:inline-block;border:0;border-radius:10px;padding:11px 22px;font-weight:800;text-decoration:none;cursor:pointer}
 .btn.main{background:linear-gradient(135deg, var(--volt), var(--sky));color:#fff;box-shadow:0 8px 26px rgba(157,78,221,.45)}
 .btn.main:hover{opacity:0.9}
-.btn.ghost{background:rgba(234,243,255,.12);border:1px solid var(--line);color:var(--text)}
-.btn.ghost[aria-pressed="true"]{background:var(--ice);color:var(--sea)}
 
 .ctrl{position:absolute;z-index:5;left:clamp(18px,6vw,96px);right:clamp(18px,4vw,56px);bottom:11%;
   display:flex;justify-content:space-between;align-items:center}
 .dots{display:flex;gap:8px}
 .dots button{width:12px;height:12px;border-radius:99px;border:0;padding:0;background:rgba(234,243,255,.35);transition:width .3s,background .3s}
 .dots button[aria-current="true"]{width:34px;background:var(--sky)}
-.arrows{display:flex;gap:8px}
-.arrows button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(5,13,36,.7);font-size:1.2rem}
-.arrows button:hover{background:var(--volt)}
 
-/* ---------- mitad inferior: recuadros ---------- */
-.catalog{padding:8px clamp(18px,4vw,56px) 120px;flex:1;background:
-  radial-gradient(70% 40% at 50% 0,rgba(157,78,221,.15),transparent 70%),var(--ink)}
-.head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px
+/* ---------- Sección Reproductor Principal Visible ----------</li> ---------- */
+.featured-player-section {
+  padding: 3rem clamp(18px, 4vw, 56px);
+  background: linear-gradient(180deg, var(--ink), var(--deep));
+  border-bottom: 2px solid var(--line);
+}
+.player-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--deep);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--volt);
+  box-shadow: 0 0 40px rgba(157, 78, 221, 0.3);
+}
+.main-video-box {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+}
+.main-video-box video {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.player-info {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.player-info h3 { margin: 0; color: var(--sky); font-size: 1.4rem; }
+.play-naruto-btn {
+  background: linear-gradient(135deg, var(--volt), var(--sky));
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,180,216,0.4);
+}
+
+/* ---------- Catálogo Grid ---------- */
+.catalog{padding:3rem clamp(18px,4vw,56px) 100px;flex:1;}
+.head{margin:0 0 18px}
+.head h1{margin:0;font-size:clamp(1.5rem,3vw,2.1rem);font-style:italic;font-weight:900;letter-spacing:-.03em}
+.head p{margin:0;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:18px}
+.card{position:relative;aspect-ratio:2/3;border:0;padding:0;text-align:left;border-radius:12px;overflow:hidden;
+  background-color:var(--deep);background-size:cover;background-position:center;
+  box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .2s;cursor:pointer}
+.card .art{position:absolute;inset:0;background:linear-gradient(165deg, rgba(157,78,221,0.2), rgba(7,6,11,0.8))}
+.card .info{position:absolute;inset:auto 0 0 0;padding:25px 12px 12px;background:linear-gradient(transparent,rgba(7,6,11,.95))}
+.card strong{display:block;font-size:1rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card small{color:var(--muted)}
+.card .star{position:absolute;top:10px;left:10px;padding:2px 9px;border-radius:99px;background:rgba(7,6,11,.8);font-size:.78rem;font-weight:700;z-index:2}
+.card:hover{transform:translateY(-4px);border:1px solid var(--volt)}
+</style>
+</head>
+<body>
+
+<header class="hero" aria-label="Anime destacados">
+  <nav class="nav">
+    <a class="logo" href="#"><i class="fas fa-play-circle" style="color:var(--volt)"></i>LAT<b>Anime</b></a>
+    <a class="mylist" href="#catalogo">Catálogo en vivo</a>
+  </nav>
+  <div id="slides"></div>
+  <div class="ctrl">
+    <div class="dots" id="dots"></div>
+  </div>
+</header>
+
+<!-- SECCIÓN DIRECTA DEL REPRODUCTOR DE NARUTO -->
+<section class="featured-player-section" id="reproductor">
+    <div class="player-wrapper">
+        <div class="main-video-box">
+            <video controls poster="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1200&auto=format&fit=crop">
+                <source src="https://archive.org/download/nrt-01/NRT01.mp4" type="video/mp4">
+                Tu navegador no soporta la reproducción de video.
+            </video>
+        </div>
+        <div class="player-info">
+            <div>
+                <h3>Naruto - Episodio 1: ¡Entra! ¡Naruto Uzumaki!</h3>
+                <p style="color:var(--muted); margin: 4px 0 0 0; font-size:0.9rem;">Reproduciendo directamente desde Archive.org en alta calidad.</p>
+            </div>
+            <button class="play-naruto-btn" onclick="document.querySelector('.main-video-box video').play()"><i class="fas fa-play"></i> Reproducir</button>
+        </div>
+    </div>
+</section>
+
+<!-- Catálogo Inferior -->
+<main class="catalog" id="catalogo">
+  <div class="head">
+    <h1>Catálogo de Animes</h1>
+    <p>Disfruta de tus series favoritas en streaming.</p>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<script>
+const ANIME = [
+  {
+    id:"naruto",
+    t:"Naruto",
+    g:"Shonen / Acción",
+    y:2002,
+    r:"9.0",
+    d:"Un joven ninja que busca el reconocimiento de su aldea y sueña con convertirse en Hokage.",
+    img:"https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=1200&auto=format&fit=crop",
+    f:1
+  },
+  {
+    id:"demonslayer",
+    t:"Demon Slayer",
+    g:"Acción / Fantasía",
+    y:2019,
+    r:"9.0",
+    d:"Tanjiro Kamado lucha contra temibles demonios para vengar a su familia.",
+    img:"https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=1200&auto=format&fit=crop",
+    f:1
+  },
+  {
+    id:"scifi",
+    t:"Cyberpunk Series",
+    g:"Sci-Fi / Acción",
+    y:2023,
+    r:"8.8",
+    d:"Explora mundos futuristas llenos de adrenalina y batallas épicas.",
+    img:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
+    f:1
+  },
+  {id:"jujutsu", t:"Jujutsu Kaisen", g:"Sobrenatural", y:2020, r:"8.8", img:"https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=600&auto=format&fit=crop"},
+  {id:"onepiece", t:"One Piece", g:"Aventura", y:1999, r:"9.1", img:"https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=600&auto=format&fit=crop"},
+  {id:"frieren", t:"Frieren", g:"Fantasía", y:2023, r:"9.3", img:"https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop"}
+];
+
+const $ = (s) => document.querySelector(s);
+
+/* ---------- Carrusel Superior ---------- */
+const feat = ANIME.filter((x) => x.f);
+$("#slides").innerHTML = feat.map((x, i) => `
+  <section class="slide${i ? "" : " on"}" style="background-image: url('${x.img}')" aria-label="${x.t}">
+    <div class="copy">
+      <span class="chips"><li class="rate">★ ${x.r}</li><li>${x.g}</li><li>${x.y}</li></span>
+      <h2>${x.t}</h2>
+      <p>${x.d}</p>
+      <div class="btns">
+        <a class="btn main" href="#reproductor"><i class="fas fa-play"></i> Ver Naruto Ahora</a>
+      </div>
+    </div>
+  </section>`).join("");
+
+$("#dots").innerHTML = feat.map((x, i) => `<button aria-label="Ir a ${x.t}" ${i ? "" : 'aria-current="true"'}></button>`).join("");
+
+const slides = [...document.querySelectorAll(".slide")];
+const dots = [...document.querySelectorAll("#dots button")];
+let cur = 0, timer;
+const go = (n) => {
+  cur = (n + slides.length) % slides.length;
+  slides.forEach((s, i) => s.classList.toggle("on", i === cur));
+  dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
+};
+const play = () => {
+  clearInterval(timer);
+  if (!matchMedia("(prefers-reduced-motion:reduce)").matches) timer = setInterval(() => go(cur + 1), 6000);
+};
+dots.forEach((d, i) => (d.onclick = () => { go(i); play(); }));
+play();
+
+/* ---------- Grid Catálogo ---------- */
+$("#grid").innerHTML = ANIME.map((x) => `
+  <div class="card" onclick="window.location.href='#reproductor'" style="background-image:url('${x.img}')">
+    <div class="art"></div>
+    <span class="star">★ ${x.r}</span>
+    <div class="info">
+      <strong>${x.t}</strong>
+      <small>${x.g} • ${x.y}</small>
+    </div>
+  </div>`).join("");
+</script>
+</body>
+</html>
