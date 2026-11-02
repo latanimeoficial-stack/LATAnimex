@@ -13,23 +13,55 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--ink);color:var(--text);
-  font-family:"Segoe UI",system-ui,-apple-system,sans-serif;line-height:1.5;min-height:100vh;display:flex;flex-direction:column}
+body{
+  margin:0;
+  background-color: var(--ink);
+  /* Fondo general restaurado con degradado atmosférico completo */
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(157, 78, 221, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 85% 60%, rgba(0, 180, 216, 0.08) 0%, transparent 45%);
+  color:var(--text);
+  font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+  line-height:1.5;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
 button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--sky);outline-offset:3px}
 
-/* ---------- Carrusel Superior ---------- */
+/* ---------- Barra Superior y Menú (Más compactos) ---------- */
 .hero{position:relative;height:clamp(380px,52vh,540px);overflow:hidden;background:var(--deep)}
-.nav{position:absolute;z-index:5;inset:0 0 auto 0;display:flex;justify-content:space-between;align-items:center;
-  padding:18px clamp(18px,4vw,56px);background:rgba(5,5,8,0.7);backdrop-filter:blur(8px)}
-.logo{font-weight:900;font-style:italic;font-size:1.7rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
+.nav{
+  position:absolute;z-index:5;inset:0 0 auto 0;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px clamp(18px,4vw,56px); /* Altura reducida como pediste */
+  background:rgba(5,5,8,0.8);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.logo{font-weight:900;font-style:italic;font-size:1.4rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:6px}
 .logo b{color:var(--volt)}
-.mylist{background:rgba(16,13,26,.9);border:1px solid rgba(157,78,221,0.3);border-radius:999px;padding:8px 16px;font-weight:600;text-decoration:none;color:var(--text)}
+
+.nav-right { display: flex; align-items: center; gap: 10px; }
+
+/* Botones de navegación más pequeños y estéticos */
+.nav-btn{
+  background:rgba(16,13,26,.9);
+  border:1px solid rgba(157,78,221,0.4);
+  border-radius:999px;
+  padding:5px 12px; /* Tamaño reducido */
+  font-size:0.85rem;
+  font-weight:600;
+  text-decoration:none;
+  color:var(--text);
+  transition:0.2s;
+}
+.nav-btn:hover { background: var(--volt); border-color: var(--sky); }
 
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .8s ease;
   display:flex;align-items:center;padding:0 clamp(18px,6vw,96px);background-size:cover;background-position:center}
 .slide.on{opacity:1;visibility:visible}
-/* Sombra optimizada: más compacta para no tapar los personajes de fondo */
 .slide::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,8,0.95) 15%,rgba(5,5,8,0.6) 45%,rgba(5,5,8,0.1) 75%)}
 .copy{position:relative;z-index:2;max-width:550px}
 .copy h2{margin:0 0 10px;font-size:clamp(2.2rem,5vw,4rem);font-weight:900;font-style:italic;text-shadow:0 4px 20px rgba(0,0,0,.8)}
@@ -63,7 +95,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card .card-info strong{display:block;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card .card-info small{color:var(--muted);font-size:0.8rem}
 
-/* ---------- Modal Estilo Netflix ---------- */
+/* ---------- Modales (Netflix & Login) ---------- */
 .modal {
     display: none; position: fixed; inset: 0; background: rgba(3,2,6,0.95);
     z-index: 100; justify-content: center; align-items: center; padding: 1.5rem; backdrop-filter: blur(10px);
@@ -73,6 +105,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     border-radius: 16px; overflow-y: auto; position: relative; border: 1px solid var(--volt);
     box-shadow: 0 0 50px rgba(157, 78, 221, 0.4);
 }
+.modal-content.login-box { max-width: 400px; padding: 2.5rem; text-align: center; }
 .close-btn { position: absolute; top: 15px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer; z-index: 20; }
 .close-btn:hover { color: var(--sky); }
 
@@ -96,6 +129,16 @@ button{font:inherit;color:inherit;cursor:pointer}
 .video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; }
 .video-box video { width: 100%; height: 100%; border: none; }
 .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: #0b0914; color: var(--muted); text-align: center; padding: 20px; }
+
+/* Estilos del formulario de Login */
+.login-input {
+  width: 100%; padding: 12px; margin: 10px 0; background: #1e1936; border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; color: #fff; font-size: 1rem;
+}
+.login-btn {
+  width: 100%; padding: 12px; margin-top: 15px; border: 0; border-radius: 8px; font-weight: 800;
+  background: linear-gradient(135deg, var(--volt), var(--sky)); color: #fff; cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -103,7 +146,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 <header class="hero">
   <nav class="nav">
     <a class="logo" href="#"><i class="fas fa-play-circle" style="color:var(--volt)"></i>LAT<b>Anime</b></a>
-    <a class="mylist" href="#catalogo">Catálogo</a>
+    <div class="nav-right">
+      <a class="nav-btn" href="#catalogo">Catálogo</a>
+      <a class="nav-btn" href="#" onclick="openLogin(); return false;"><i class="fas fa-user"></i> Iniciar Sesión</a>
+    </div>
   </nav>
   <div id="slides"></div>
   <div class="ctrl">
@@ -119,6 +165,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="grid" id="grid"></div>
 </main>
 
+<!-- Modal de Reproducción (Estilo Netflix) -->
 <div class="modal" id="modal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">×</span>
@@ -136,6 +183,20 @@ button{font:inherit;color:inherit;cursor:pointer}
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Modal de Iniciar Sesión -->
+<div class="modal" id="loginModal">
+    <div class="modal-content login-box">
+        <span class="close-btn" onclick="closeLogin()">×</span>
+        <h2 style="margin-top:0; font-style:italic; color:var(--sky);">Iniciar Sesión</h2>
+        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:20px;">Accede a tu cuenta de LAT Anime</p>
+        <form onsubmit="event.preventDefault(); alert('¡Inicio de sesión simulado con éxito!'); closeLogin();">
+            <input type="email" class="login-input" placeholder="Correo electrónico" required>
+            <input type="password" class="login-input" placeholder="Contraseña" required>
+            <button type="submit" class="login-btn">Entrar</button>
+        </form>
     </div>
 </div>
 
@@ -199,7 +260,7 @@ const ANIME = [
 const $ = s => document.querySelector(s);
 let currentAnime = null;
 
-// Carrusel (Usa la propiedad .banner)
+// Carrusel
 const feat = ANIME.filter(x => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
   <section class="slide${i ? "" : " on"}" style="background-image: url('${x.banner}')">
@@ -221,11 +282,10 @@ const go = n => {
   slides.forEach((s, i) => s.classList.toggle("on", i === cur));
   dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
 };
-// Carrusel ágil cada 4 segundos
 timer = setInterval(() => go(cur + 1), 4000);
 dots.forEach((d, i) => d.onclick = () => { go(i); clearInterval(timer); });
 
-// Catálogo Grid (Usa la propiedad .img vertical)
+// Catálogo Grid
 $("#grid").innerHTML = ANIME.map(x => `
   <div class="card" onclick="openModal('${x.id}')" style="background-image: url('${x.img}')">
     <div class="art"></div>
@@ -290,6 +350,17 @@ function resetVideo() {
 function closeModal() {
     $("#modal").style.display = "none";
     $("#videoBox").innerHTML = "";
+}
+
+// Funciones para el Modal de Iniciar Sesión
+function openLogin() {
+    $("#loginModal").style.display = "flex";
+}
+function closeModalLogin() {
+    $("#loginModal").style.display = "none";
+}
+function closeLogin() {
+    $("#loginModal").style.display = "none";
 }
 </script>
 </body>
