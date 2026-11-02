@@ -329,7 +329,7 @@ function checkUserSession() {
 checkUserSession();
 
 // ==========================================
-// DATOS DE LOS ANIMES (Todos en carrusel y con miniatura por episodio)
+// DATOS DE LOS ANIMES (Episodio 2 de Naruto agregado)
 // ==========================================
 const ANIME = [
   {
@@ -341,7 +341,7 @@ const ANIME = [
     seasons: [
       { name: "Temporada 1", episodes: [
         { title: "Episodio 1", subtitle: "¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4", thumb: "naruto01.jpg" },
-        { title: "Episodio 2", subtitle: "¡Mi nombre es Konohamaru!", url: "", thumb: "naruto.jpg" }
+        { title: "Episodio 2", subtitle: "¡Mi nombre es Konohamaru!", url: "https://archive.org/download/nrt-02/NRT02.mp4", thumb: "naruto01.jpg" }
       ]}
     ]
   },
@@ -398,7 +398,7 @@ const ANIME = [
 const $ = s => document.querySelector(s);
 let currentAnime = null;
 
-// Carrusel (Incluye todos los animes con f: true)
+// Carrusel
 const feat = ANIME.filter(x => x.f);
 $("#slides").innerHTML = feat.map((x, i) => `
   <section class="slide${i ? "" : " on"}" style="background-image: url('${x.banner}')">
