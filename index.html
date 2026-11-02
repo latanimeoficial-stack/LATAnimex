@@ -62,14 +62,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 .head p{margin:0;color:var(--muted)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:18px}
 .card{position:relative;aspect-ratio:2/3;border:0;padding:0;text-align:left;border-radius:12px;overflow:hidden;
-  background-color:var(--deep);background-size:cover;background-position:center;
-  box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .2s;cursor:pointer}
+  box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .2s;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:15px;}
+.card .title-badge { font-size: 1.3rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -0.02em; text-shadow: 0 4px 12px rgba(0,0,0,0.6); margin-top: auto; }
 .card .art{position:absolute;inset:0;background:linear-gradient(165deg, transparent 40%, rgba(7,6,11,0.95))}
-.card .info{position:absolute;inset:auto 0 0 0;padding:25px 12px 12px;background:linear-gradient(transparent,rgba(7,6,11,.95))}
-.card strong{display:block;font-size:1rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card small{color:var(--muted)}
+.card .info{position:relative;z-index:2;padding-top:10px;}
+.card strong{display:block;font-size:1.1rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card small{color:rgba(255,255,255,0.8)}
 .card .star{position:absolute;top:10px;left:10px;padding:2px 9px;border-radius:99px;background:rgba(7,6,11,.8);font-size:.78rem;font-weight:700;z-index:2}
-.card:hover{transform:translateY(-4px);border:1px solid var(--volt)}
+.card:hover{transform:translateY(-4px);box-shadow: 0 0 25px rgba(157, 78, 221, 0.6);}
 
 /* ---------- Modal Estilo Netflix ---------- */
 .modal {
@@ -103,7 +103,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 }
 .close-btn:hover { color: var(--sky); }
 
-/* Distribución Izquierda (Imagen Real) y Derecha (Sinopsis) */
+/* Distribución Izquierda (Portada Temática) y Derecha (Sinopsis) */
 .anime-detail-header {
     display: flex;
     gap: 28px;
@@ -112,14 +112,27 @@ button{font:inherit;color:inherit;cursor:pointer}
     flex-wrap: wrap;
     align-items: flex-start;
 }
-.anime-poster-large {
+.anime-poster-custom {
     width: 200px;
     aspect-ratio: 2/3;
-    object-fit: cover;
     border-radius: 12px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.7);
-    border: 1px solid var(--line);
+    border: 2px solid rgba(255,255,255,0.2);
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+.anime-poster-custom h1 {
+    font-size: 1.6rem;
+    font-weight: 900;
+    font-style: italic;
+    margin: 0;
+    text-transform: uppercase;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.8);
 }
 .anime-info-text {
     flex: 1;
@@ -129,7 +142,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .anime-info-text .meta-tags { display: flex; gap: 10px; margin-bottom: 14px; font-size: 0.95rem; color: var(--sky); font-weight: 700; }
 .anime-info-text p { color: #d6e4ff; line-height: 1.65; margin: 0; font-size: 1.05rem; }
 
-/* Sección de episodios y reproductor inferior */
+/* Sección de episodios y reproductor */
 .episodes-section-box {
     padding: 0 2rem 2.5rem 2rem;
 }
@@ -139,4 +152,348 @@ button{font:inherit;color:inherit;cursor:pointer}
     align-items: center;
     margin-bottom: 1rem;
     flex-wrap: wrap;
-    gap:
+    gap: 10px;
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+}
+.season-select {
+    background: #1e1936;
+    color: #fff;
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+.season-select option { background: #12101e; color: #fff; }
+
+.episodes-list { max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+.ep-btn {
+    background: #1e1936; color: #fff;
+    border: 1px solid var(--line);
+    padding: 12px 16px;
+    border-radius: 8px; cursor: pointer;
+    font-weight: 600; text-align: left; transition: 0.2s;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.ep-btn:hover, .ep-btn.active { background: var(--volt); border-color: var(--sky); }
+
+.video-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; margin-top: 10px; }
+.video-container video { width: 100%; height: 100%; border: none; }
+.placeholder-box {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; background: radial-gradient(circle, #1a1633 0%, #07060b 100%);
+    color: #fff; text-align: center; padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<header class="hero" aria-label="Anime destacados">
+  <nav class="nav">
+    <a class="logo" href="#"><i class="fas fa-play-circle" style="color:var(--volt)"></i>LAT<b>Animex</b></a>
+    <a class="mylist" href="#catalogo">Catálogo</a>
+  </nav>
+  <div id="slides"></div>
+  <div class="ctrl">
+    <div class="dots" id="dots"></div>
+    <div class="arrows">
+      <button id="prev">‹</button>
+      <button id="next">›</button>
+    </div>
+  </div>
+</header>
+
+<main class="catalog" id="catalogo">
+  <div class="head">
+    <h1>Catálogo de Animes</h1>
+    <p>Haz clic en cualquier serie para ver su portada temática, sinopsis y capítulos.</p>
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<!-- Modal Estilo Netflix -->
+<div class="modal" id="playerModal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closePlayer()">×</span>
+        
+        <!-- Cabecera: Portada temática a la izquierda / Sinopsis a la derecha -->
+        <div class="anime-detail-header" id="animeHeader"></div>
+
+        <!-- Selector de Temporadas y Lista de Episodios -->
+        <div class="episodes-section-box">
+            <div class="season-selector-bar">
+                <h3 style="margin:0; color:var(--sky);">Episodios</h3>
+                <select class="season-select" id="seasonSelect" onchange="changeSeason(this.value)">
+                    <!-- Se cargan dinámicamente -->
+                </select>
+            </div>
+            <div class="episodes-list" id="episodesList">
+                <!-- Se cargan dinámicamente -->
+            </div>
+
+            <!-- Reproductor de Video (Solo arranca al hacer clic en un capítulo) -->
+            <div class="video-container" id="videoContainer">
+                <div class="placeholder-box">
+                    <i class="fas fa-film" style="font-size:3rem; color:var(--volt); margin-bottom:10px;"></i>
+                    <p style="color:var(--muted); margin:0;">Selecciona un capítulo arriba para comenzar la reproducción.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ============ BASE DE DATOS CON FONDOS TEMÁTICOS PERSONALIZADOS ============ */
+const ANIME = [
+  {
+    id: "naruto",
+    t: "Naruto",
+    g: "Shonen / Acción",
+    y: 2002,
+    r: "9.0",
+    d: "Un joven ninja marginado de la Aldea Oculta de la Hoja busca desesperadamente el reconocimiento de todos y sueña con convertirse en Hokage, enfrentando grandes pruebas, batallas intensas y descubriendo los oscuros secretos de su propio pasado y del mundo shinobi.",
+    bg: "linear-gradient(135deg, #ff6b00 0%, #111111 100%)", // Naranja & Negro Hokage
+    f: 1,
+    seasons: [
+      {
+        name: "Temporada 1",
+        episodes: [
+          { title: "Episodio 1: ¡Entra! ¡Naruto Uzumaki!", videoUrl: "https://archive.org/download/nrt-01/NRT01.mp4" },
+          { title: "Episodio 2: ¡Mi nombre es Konohamaru!", videoUrl: "" },
+          { title: "Episodio 3: ¡Sasuke y Sakura: Amigos o enemigos!", videoUrl: "" }
+        ]
+      },
+      {
+        name: "Temporada 2",
+        episodes: [
+          { title: "Episodio 1: ¡Próximamente más episodios!", videoUrl: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "demonslayer",
+    t: "Demon Slayer",
+    g: "Acción / Fantasía",
+    y: 2019,
+    r: "9.0",
+    d: "Tanjiro Kamado ve su vida destrozada cuando un demonio masacra a su familia y convierte a su hermana Nezuko en una criatura sedienta de sangre. Decidido a vengarlos y encontrar una cura, se une al Cuerpo de Cazadores de Demonios.",
+    bg: "linear-gradient(135deg, #054f31 0%, #a80000 100%)", // Verde Tanjiro & Rojo Sangre
+    f: 1,
+    seasons: [
+      {
+        name: "Temporada 1 (Kimetsu no Yaiba)",
+        episodes: [
+          { title: "Episodio 1: Crueldad", videoUrl: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "jujutsu",
+    t: "Jujutsu Kaisen",
+    g: "Sobrenatural",
+    y: 2020,
+    r: "8.8",
+    d: "Yuji Itadori es un estudiante común con una fuerza física descomunal que se ve envuelto en el mundo oculto de las maldiciones tras ingerir el dedo podrido de Sukuna, el Rey de las Maldiciones, contrayendo un pacto mortal.",
+    bg: "linear-gradient(135deg, #4b0082 0%, #000000 100%)", // Violeta Maldición & Negro
+    f: 1,
+    seasons: [
+      {
+        name: "Temporada 1",
+        episodes: [
+          { title: "Episodio 1: Ryomen Sukuna", videoUrl: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "onepiece",
+    t: "One Piece",
+    g: "Aventura",
+    y: 1999,
+    r: "9.1",
+    d: "Acompaña a Monkey D. Luffy y a su colorida tripulación de piratas en una gran travesía a través del Grand Line en busca del legendario tesoro dejado por el difunto Rey de los Piratas, Gol D. Roger: el One Piece.",
+    bg: "linear-gradient(135deg, #0077b6 0%, #023e8a 100%)", // Azul Océano & Pirata
+    f: 1,
+    seasons: [
+      {
+        name: "East Blue (Temporada 1)",
+        episodes: [
+          { title: "Episodio 1: ¡Soy Luffy! ¡El hombre que será el Rey de los Piratas!", videoUrl: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "attack",
+    t: "Attack on Titan",
+    g: "Drama / Acción",
+    y: 2013,
+    r: "9.1",
+    d: "Para escapar de la extinción a manos de gigantescos humanoides devoradores llamados Titanes, la humanidad sobrevive confinada detrás de tres enormes murallas concéntricas, hasta que un día una brecha lo cambia todo.",
+    bg: "linear-gradient(135deg, #3d2b1f 0%, #1a1a1a 100%)", // Marrón Muralla & Carbón
+    f: 1,
+    seasons: [
+      {
+        name: "Temporada 1",
+        episodes: [
+          { title: "Episodio 1: Para ti, en 2000 años", videoUrl: "" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "sololeveling",
+    t: "Solo Leveling",
+    g: "Acción",
+    y: 2024,
+    r: "8.5",
+    d: "En un mundo donde portales conectan la realidad con mazmorras llenas de monstruos, Sung Jinwoo, conocido como el cazador más débil de la humanidad, recibe una extraña misión que le otorga el poder único de subir de nivel.",
+    bg: "linear-gradient(135deg, #00b4d8 0%, #050515 100%)", // Azul Neón & Sombra
+    f: 1,
+    seasons: [
+      {
+        name: "Temporada 1",
+        episodes: [
+          { title: "Episodio 1: Me he acostumbrado", videoUrl: "" }
+        ]
+      }
+    ]
+  }
+];
+
+const $ = (s) => document.querySelector(s);
+const byId = (id) => ANIME.find((x) => x.id === id);
+let currentAnime = null;
+
+/* ---------- Carrusel Superior Automático ---------- */
+const feat = ANIME.filter((x) => x.f);
+$("#slides").innerHTML = feat.map((x, i) => `
+  <section class="slide${i ? "" : " on"}" style="background: ${x.bg}" aria-label="${x.t}">
+    <div class="copy">
+      <span class="chips"><li class="rate">★ ${x.r}</li><li>${x.g}</li><li>${x.y}</li></span>
+      <h2>${x.t}</h2>
+      <p>${x.d}</p>
+      <div class="btns">
+        <button class="btn main" onclick="openPlayer('${x.id}')"><i class="fas fa-info-circle"></i> Ver Sinopsis y Episodios</button>
+      </div>
+    </div>
+  </section>`).join("");
+
+$("#dots").innerHTML = feat.map((x, i) => `<button aria-label="Ir a ${x.t}" ${i ? "" : 'aria-current="true"'}></button>`).join("");
+
+const slides = [...document.querySelectorAll(".slide")];
+const dots = [...document.querySelectorAll("#dots button")];
+let cur = 0, timer;
+const go = (n) => {
+  cur = (n + slides.length) % slides.length;
+  slides.forEach((s, i) => s.classList.toggle("on", i === cur));
+  dots.forEach((d, i) => d.setAttribute("aria-current", i === cur));
+};
+const play = () => {
+  clearInterval(timer);
+  timer = setInterval(() => go(cur + 1), 6000);
+};
+$("#prev").onclick = () => { go(cur - 1); play(); };
+$("#next").onclick = () => { go(cur + 1); play(); };
+dots.forEach((d, i) => (d.onclick = () => { go(i); play(); }));
+play();
+
+/* ---------- Renderizar Tarjetas del Catálogo con Portadas Temáticas ---------- */
+$("#grid").innerHTML = ANIME.map((x) => `
+  <div class="card" onclick="openPlayer('${x.id}')" style="background: ${x.bg}">
+    <span class="star">★ ${x.r}</span>
+    <div class="title-badge">${x.t}</div>
+    <div class="info">
+      <strong>${x.t}</strong>
+      <small>${x.g} • ${x.y}</small>
+    </div>
+  </div>`).join("");
+
+/* ---------- Lógica del Modal Estilo Netflix ---------- */
+function openPlayer(id) {
+    currentAnime = byId(id);
+    const modal = document.getElementById('playerModal');
+    const header = document.getElementById('animeHeader');
+    const select = document.getElementById('seasonSelect');
+
+    // Portada temática con el nombre a la izquierda / Sinopsis a la derecha
+    header.innerHTML = `
+        <div class="anime-poster-custom" style="background: ${currentAnime.bg}">
+            <i class="fas fa-tv" style="font-size:2rem; margin-bottom:10px; color:rgba(255,255,255,0.8)"></i>
+            <h1>${currentAnime.t}</h1>
+        </div>
+        <div class="anime-info-text">
+            <h2>${currentAnime.t}</h2>
+            <div class="meta-tags">
+                <span>★ ${currentAnime.r}</span>
+                <span>•</span>
+                <span>${currentAnime.g}</span>
+                <span>•</span>
+                <span>${currentAnime.y}</span>
+            </div>
+            <p>${currentAnime.d}</p>
+        </div>
+    `;
+
+    resetVideoPlaceholder();
+
+    select.innerHTML = currentAnime.seasons.map((season, index) => `
+        <option value="${index}">${season.name}</option>
+    `).join("");
+
+    changeSeason(0);
+    modal.style.display = 'flex';
+}
+
+function resetVideoPlaceholder() {
+    document.getElementById('videoContainer').innerHTML = `
+        <div class="placeholder-box">
+            <i class="fas fa-film" style="font-size:3rem; color:var(--volt); margin-bottom:10px;"></i>
+            <p style="color:var(--muted); margin:0;">Selecciona un capítulo arriba para comenzar la reproducción.</p>
+        </div>
+    `;
+}
+
+function changeSeason(seasonIndex) {
+    const season = currentAnime.seasons[seasonIndex];
+    const epList = document.getElementById('episodesList');
+
+    epList.innerHTML = season.episodes.map((ep, index) => `
+        <button class="ep-btn" id="ep-btn-${index}" onclick="playEpisode('${ep.videoUrl}', '${ep.title}', ${index})">
+            <span><i class="fas fa-play-circle" style="color:var(--sky); margin-right:10px;"></i> ${ep.title}</span>
+            <span style="font-size:0.8rem; opacity:0.8;">Ver ahora</span>
+        </button>
+    `).join("");
+}
+
+function playEpisode(url, title, index) {
+    const container = document.getElementById('videoContainer');
+    
+    document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+    const currentBtn = document.getElementById(`ep-btn-${index}`);
+    if(currentBtn) currentBtn.classList.add('active');
+
+    if(url) {
+        container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4">Tu navegador no soporta el video.</video>`;
+    } else {
+        container.innerHTML = `
+            <div class="placeholder-box">
+                <i class="fas fa-clock" style="font-size:3rem; color:var(--sky); margin-bottom:10px;"></i>
+                <h3 style="margin:0 0 6px 0; color:#fff;">${title}</h3>
+                <p style="color:var(--muted); margin:0;">Próximamente disponible en los servidores.</p>
+            </div>
+        `;
+    }
+}
+
+function closePlayer() {
+    document.getElementById('playerModal').style.display = 'none';
+    document.getElementById('videoContainer').innerHTML = '';
+}
+</script>
+</body>
+</html>
