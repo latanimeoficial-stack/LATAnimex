@@ -99,6 +99,51 @@ button{font:inherit;color:inherit;cursor:pointer}
 .history-list { max-height: 180px; overflow-y: auto; background: #151124; border-radius: 8px; padding: 10px; margin-top: 10px; border: 1px solid rgba(255,255,255,0.1); }
 .history-item { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
 
+/* ---------- Estilo Detalle Anime ---------- */
+.anime-hero-bg {
+    position: relative; background-size: cover; background-position: center; padding: 3rem 2.5rem 2rem 2.5rem;
+    display: flex; gap: 30px; flex-wrap: wrap; align-items: flex-start;
+}
+.anime-hero-bg::before {
+    content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, var(--deep) 0%, rgba(16,13,26,0.85) 60%, rgba(16,13,26,0.6) 100%);
+}
+.anime-poster-container { position: relative; z-index: 2; width: 220px; flex-shrink: 0; }
+.anime-poster-img {
+    width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 14px;
+    border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+}
+.anime-details-main { position: relative; z-index: 2; flex: 1; min-width: 280px; }
+.anime-details-main h2 { margin: 0 0 10px 0; font-size: 2.8rem; font-style: italic; font-weight: 900; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
+.genre-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; list-style: none; padding: 0; }
+.genre-chips li { background: rgba(0, 180, 216, 0.2); border: 1px solid var(--sky); padding: 4px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--sky); }
+.anime-details-main p { color: #d6e4ff; margin: 0 0 20px 0; font-size: 0.95rem; line-height: 1.6; }
+
+.info-box { background: rgba(5,5,8,0.6); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; margin-top: 15px; }
+.info-box h4 { margin: 0 0 10px 0; color: var(--sky); font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+.info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; font-size: 0.85rem; color: var(--muted); }
+.info-grid span b { color: #fff; }
+
+.anime-body-section { padding: 2rem 2.5rem 3rem 2.5rem; }
+.section-title { font-size: 1.4rem; font-style: italic; font-weight: 800; margin: 0 0 15px 0; color: #fff; border-left: 4px solid var(--volt); padding-left: 10px; }
+
+/* Selector de Temporadas y Episodios */
+.season-selector-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.season-select { background: #1e1936; color: #fff; border: 1px solid rgba(157,78,221,0.5); padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.episodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; }
+.ep-card {
+    background: #151124; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden;
+    cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; text-align: left; padding: 0;
+}
+.ep-card:hover, .ep-card.active { border-color: var(--sky); transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,180,216,0.3); }
+.ep-thumb { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; }
+.ep-card-info { padding: 12px; }
+.ep-card-info strong { display: block; font-size: 0.95rem; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ep-card-info span { font-size: 0.8rem; color: var(--muted); }
+
+.video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+.video-box video { width: 100%; height: 100%; border: none; }
+.placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: #0b0914; color: var(--muted); text-align: center; padding: 20px; }
+
 /* ---------- Estética unificada Chatburbuja LATAnime ---------- */
 #chat-bubble {
   position: fixed; bottom: 24px; right: 24px;
@@ -357,7 +402,7 @@ function checkUserSession() {
 checkUserSession();
 
 // ==========================================
-// DATOS DE LOS ANIMES (Episodios 1 al 4 de Naruto agregados)
+// DATOS DE LOS ANIMES (Episodios 1 al 4 de Naruto incluidos)
 // ==========================================
 const ANIME = [
   {
@@ -543,14 +588,12 @@ function closeModal() {
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // Generar o recuperar ID único por sesión para cumplir con tus reglas de /chat/messages y /status
   let sessionUid = localStorage.getItem('latanime_uid');
   if (!sessionUid) {
     sessionUid = 'usr_' + Math.random().toString(36).substring(2, 9);
     localStorage.setItem('latanime_uid', sessionUid);
   }
 
-  // Interfaz del Chat
   const bubble = document.getElementById('chat-bubble');
   const chatWindow = document.getElementById('chat-window');
   const closeChat = document.getElementById('chat-close');
@@ -562,7 +605,6 @@ function closeModal() {
     chatWindow.style.display = 'none';
   });
 
-  // Suscripción Global al nodo de mensajes
   const messagesRef = ref(db, 'chat/messages');
   const lastMessagesQuery = query(messagesRef, limitToLast(50));
   const sendBtn = document.getElementById('chat-send');
@@ -588,7 +630,6 @@ function closeModal() {
     }
   }
 
-  // Recibir mensajes globales en tiempo real para todos los visitantes
   onChildAdded(lastMessagesQuery, (snapshot) => {
     const msgData = snapshot.val();
     if (msgData && msgData.text) {
@@ -600,7 +641,6 @@ function closeModal() {
     }
   });
 
-  // Presencia de Usuarios en Línea
   const connectedRef = ref(db, '.info/connected');
   const myStatusRef = ref(db, 'status/' + sessionUid);
 
@@ -610,7 +650,7 @@ function closeModal() {
       set(myStatusRef, {
         state: 'online',
         last_changed: Date.now()
-  2026-03-08 });
+      });
     }
   });
 
