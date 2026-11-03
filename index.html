@@ -357,7 +357,7 @@ function checkUserSession() {
 checkUserSession();
 
 // ==========================================
-// DATOS DE LOS ANIMES
+// DATOS DE LOS ANIMES (Episodios 1 al 4 de Naruto agregados)
 // ==========================================
 const ANIME = [
   {
@@ -369,7 +369,9 @@ const ANIME = [
     seasons: [
       { name: "Temporada 1", episodes: [
         { title: "Episodio 1", subtitle: "¡Entra! ¡Naruto Uzumaki!", url: "https://archive.org/download/nrt-01/NRT01.mp4", thumb: "naruto01.jpg" },
-        { title: "Episodio 2", subtitle: "¡Mi nombre es Konohamaru!", url: "https://archive.org/download/nrt-02/NRT02.mp4", thumb: "naruto01.jpg" }
+        { title: "Episodio 2", subtitle: "¡Mi nombre es Konohamaru!", url: "https://archive.org/download/nrt-02/NRT02.mp4", thumb: "naruto01.jpg" },
+        { title: "Episodio 3", subtitle: "¡Sasuke y Sakura: Amigos o enemigos!", url: "https://archive.org/download/nrt-03/NRT03.mp4", thumb: "naruto01.jpg" },
+        { title: "Episodio 4", subtitle: "¡Prueba de supervivencia!", url: "https://archive.org/download/nrt-03/NRT04.mp4", thumb: "naruto01.jpg" }
       ]}
     ]
   },
@@ -608,7 +610,7 @@ function closeModal() {
       set(myStatusRef, {
         state: 'online',
         last_changed: Date.now()
-      });
+  2026-03-08 });
     }
   });
 
