@@ -143,6 +143,58 @@ button{font:inherit;color:inherit;cursor:pointer}
 .video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
 .video-box video { width: 100%; height: 100%; border: none; }
 .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; background: #0b0914; color: var(--muted); text-align: center; padding: 20px; }
+
+/* ---------- Estética unificada Chatburbuja LATAnime ---------- */
+#chat-bubble {
+  position: fixed; bottom: 24px; right: 24px;
+  background: linear-gradient(135deg, var(--volt), var(--sky));
+  color: white; border-radius: 50%; width: 62px; height: 62px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 8px 25px rgba(157,78,221,0.5);
+  z-index: 1000; font-size: 1.6rem; transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+#chat-bubble:hover { transform: scale(1.1); box-shadow: 0 0 35px rgba(0,180,216,0.7); }
+
+#chat-window {
+  position: fixed; bottom: 100px; right: 24px; width: 340px; height: 450px;
+  background: var(--deep); border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.8); display: none; flex-direction: column;
+  z-index: 1000; border: 1px solid rgba(157,78,221,0.5); overflow: hidden;
+  backdrop-filter: blur(12px);
+}
+.chat-header {
+  background: rgba(16,13,26,0.95); color: white; padding: 14px 18px; font-weight: 900;
+  font-style: italic; font-size: 1.05rem; border-bottom: 1px solid rgba(157,78,221,0.3);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.chat-header b { color: var(--volt); }
+#chat-close { color: var(--muted); cursor: pointer; font-size: 1.5rem; transition: color 0.2s; }
+#chat-close:hover { color: var(--sky); }
+
+#chat-messages {
+  flex: 1; padding: 15px; overflow-y: auto; font-size: 0.9rem;
+  display: flex; flex-direction: column; gap: 10px; background: #070b18;
+}
+.chat-msg {
+  background: #151124; border: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 14px; border-radius: 12px; max-width: 85%; word-break: break-word;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.chat-footer {
+  display: flex; border-top: 1px solid rgba(157,78,221,0.3); background: var(--deep); padding: 8px; gap: 8px;
+}
+#chat-input {
+  flex: 1; border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 10px 14px;
+  background: #1e1936; color: #fff; outline: none; font-size: 0.9rem; transition: border-color 0.2s;
+}
+#chat-input:focus { border-color: var(--sky); }
+#chat-send {
+  background: linear-gradient(135deg, var(--volt), var(--sky)); color: white; border: none;
+  border-radius: 10px; padding: 0 16px; cursor: pointer; font-weight: 800;
+  box-shadow: 0 4px 15px rgba(157,78,221,0.4); transition: opacity 0.2s;
+}
+#chat-send:hover { opacity: 0.9; }
 </style>
 </head>
 <body>
@@ -240,6 +292,20 @@ button{font:inherit;color:inherit;cursor:pointer}
     </div>
 </div>
 
+<!-- Estructura HTML del Chatburbuja con Estética LATAnime -->
+<div id="chat-bubble" title="Abrir Chat"><i class="fas fa-comment-dots"></i></div>
+<div id="chat-window">
+  <div class="chat-header">
+    <span>LAT<b>Anime</b> Chat</span>
+    <span id="chat-close">&times;</span>
+  </div>
+  <div id="chat-messages"></div>
+  <div class="chat-footer">
+    <input type="text" id="chat-input" placeholder="Escribe un mensaje...">
+    <button id="chat-send"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
 <script>
 // ==========================================
 // SESIÓN, PERFIL E HISTORIAL
@@ -327,7 +393,7 @@ function checkUserSession() {
 checkUserSession();
 
 // ==========================================
-// DATOS DE LOS ANIMES (Episodio 2 de Naruto agregado)
+// DATOS DE LOS ANIMES
 // ==========================================
 const ANIME = [
   {
@@ -489,6 +555,77 @@ function closeModal() {
     $("#modal").style.display = "none";
     $("#videoBox").innerHTML = "";
 }
+</script>
+
+<!-- ========================================== -->
+<!-- SCRIPT DE FIREBASE REALTIME DATABASE       -->
+<!-- ========================================== -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  // Configuración de tu proyecto Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyAWOHzIyRKr-8Pu229tsRkSBF-CNQ0-nTE",
+    authDomain: "latanimex.firebaseapp.com",
+    databaseURL: "https://latanimex-default-rtdb.firebaseio.com",
+    projectId: "latanimex",
+    storageBucket: "latanimex.firebasestorage.app",
+    messagingSenderId: "83710059363",
+    appId: "1:83710059363:web:8d5ba2bbdf11400486a956"
+  };
+
+  // Inicializar Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Control de interfaz de la burbuja
+  const bubble = document.getElementById('chat-bubble');
+  const chatWindow = document.getElementById('chat-window');
+  const closeChat = document.getElementById('chat-close');
+
+  bubble.addEventListener('click', () => {
+    chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
+  });
+  closeChat.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+  });
+
+  // Lógica de mensajes
+  const chatRef = ref(db, 'chat/messages');
+  const sendBtn = document.getElementById('chat-send');
+  const inputField = document.getElementById('chat-input');
+  const messagesContainer = document.getElementById('chat-messages');
+
+  sendBtn.addEventListener('click', sendMessage);
+  inputField.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+
+  function sendMessage() {
+    const text = inputField.value.trim();
+    if (text.length > 0 && text.length <= 500) {
+      const profileName = localStorage.getItem('latanime_profile_name') || 'Invitado';
+      push(chatRef, {
+        text: text,
+        createdAt: Date.now(),
+        name: profileName,
+        uid: localStorage.getItem('latanime_user') || 'anonimo'
+      });
+      inputField.value = '';
+    }
+  }
+
+  onChildAdded(chatRef, (snapshot) => {
+    const msgData = snapshot.val();
+    if (msgData && msgData.text) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'chat-msg';
+      msgDiv.innerHTML = `<b style="color:var(--sky); font-size:0.8rem; display:block;">${msgData.name || 'Anónimo'}</b><span>${msgData.text}</span>`;
+      messagesContainer.appendChild(msgDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+  });
 </script>
 
 <!-- LATAnime PWA: actualizaciones desde GitHub Pages -->
